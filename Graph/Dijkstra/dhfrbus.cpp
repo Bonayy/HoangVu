@@ -27,8 +27,7 @@ ll dijkstra(int n, int k, int s, int t){
     dis[s][0] = 0; pq.push({s, 0, 0});
     while (!pq.empty()){
         auto cur = pq.top(); pq.pop();
-        if (cur.w > dis[cur.u][cur.k])
-            continue;
+        if (cur.w > dis[cur.u][cur.k]) continue;
         if (cur.u == t) return cur.w;
         for (auto e : adj[cur.u]){
             if (dis[e.u][cur.k] > dis[cur.u][cur.k] + e.w){
