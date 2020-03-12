@@ -1,9 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-map <int, int> trap[2];
+const int H = 5e5 + 5;
+int trap[2][H];
 
 int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
     int n, h, ans, curr, cnt; 
     cin >> n >> h;
     ans = n + 1; cnt = 0; curr = n / 2;
@@ -15,12 +18,8 @@ int main(){
             ans = curr; cnt = 1;
         }
         else cnt += ans == curr;
-        auto it = trap[0].find(i);
-        if (it != trap[0].end())
-            curr -= it->second;
-        it = trap[1].find(h - i);
-        if (it != trap[1].end())
-            curr += it->second;
+        curr -= trap[0][i];
+        curr += trap[1][h - i];
     }
     cout << ans << ' ' << cnt << '\n';
 }
