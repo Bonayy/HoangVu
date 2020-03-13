@@ -24,8 +24,8 @@ int getpoints(int i, double r){
     }
     sort(angles.begin(), angles.end());
     int c = 1, res = 1;
-    for (auto i = angles.begin(); i != angles.end(); i++){
-        if ((*i).second) c++; else c--;
+    for (auto it = angles.begin(); it != angles.end(); it++){
+        if (it->second) c++; else c--;
         if (c > res) res = c;
     }
     return res;
