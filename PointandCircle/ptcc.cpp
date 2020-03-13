@@ -25,8 +25,7 @@ int getpoints(int i, double r){
     sort(angles.begin(), angles.end());
     int c = 1, res = 1;
     for (auto i = angles.begin(); i != angles.end(); i++){
-        if ((*i).second) c++;
-        else c--;
+        if ((*i).second) c++; else c--;
         if (c > res) res = c;
     }
     return res;
@@ -56,8 +55,7 @@ int main(){
     forn(i, 0, n) forn(j, i + 1, n){
         dis[i][j] = dis[j][i] = abs(a[i] - a[j]);
     }
-    double l = 0, r = 1e9, m;
-    double ans = 0;
+    double l = 0, r = 1e9, m, ans = 0;
     while (r - l > 1e-5){
         m = l + (r - l) / 2;
         if (avail(m)){
