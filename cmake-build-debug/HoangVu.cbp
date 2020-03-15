@@ -150,6 +150,9 @@
 		<Unit filename="/home/dell/HoangVu/Data Structure/Trie/Trie.cpp">
 			<Option target="HoangVu"/>
 		</Unit>
+		<Unit filename="/home/dell/HoangVu/Data Structure/Trie/maxxor.cpp">
+			<Option target="HoangVu"/>
+		</Unit>
 		<Unit filename="/home/dell/HoangVu/Data Structure/Trie/sec.cpp">
 			<Option target="HoangVu"/>
 		</Unit>

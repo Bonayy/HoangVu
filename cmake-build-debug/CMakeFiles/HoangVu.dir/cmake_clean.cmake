@@ -21,6 +21,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/HoangVu.dir/Data_Structure/SplayTree/SplayTree.cpp.o"
   "CMakeFiles/HoangVu.dir/Data_Structure/SqrtDecomposition/maxqueries.cpp.o"
   "CMakeFiles/HoangVu.dir/Data_Structure/Trie/Trie.cpp.o"
+  "CMakeFiles/HoangVu.dir/Data_Structure/Trie/maxxor.cpp.o"
   "CMakeFiles/HoangVu.dir/Data_Structure/Trie/sec.cpp.o"
   "CMakeFiles/HoangVu.dir/Data_Structure/segmenttree/Area.cpp.o"
   "CMakeFiles/HoangVu.dir/Data_Structure/segmenttree/countdfr.cpp.o"

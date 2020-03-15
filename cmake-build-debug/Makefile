@@ -717,6 +717,33 @@ Data_Structure/Trie/Trie.cpp.s:
 	$(MAKE) -f CMakeFiles/HoangVu.dir/build.make CMakeFiles/HoangVu.dir/Data_Structure/Trie/Trie.cpp.s
 .PHONY : Data_Structure/Trie/Trie.cpp.s
 
+Data_Structure/Trie/maxxor.o: Data_Structure/Trie/maxxor.cpp.o
+
+.PHONY : Data_Structure/Trie/maxxor.o
+
+# target to build an object file
+Data_Structure/Trie/maxxor.cpp.o:
+	$(MAKE) -f CMakeFiles/HoangVu.dir/build.make CMakeFiles/HoangVu.dir/Data_Structure/Trie/maxxor.cpp.o
+.PHONY : Data_Structure/Trie/maxxor.cpp.o
+
+Data_Structure/Trie/maxxor.i: Data_Structure/Trie/maxxor.cpp.i
+
+.PHONY : Data_Structure/Trie/maxxor.i
+
+# target to preprocess a source file
+Data_Structure/Trie/maxxor.cpp.i:
+	$(MAKE) -f CMakeFiles/HoangVu.dir/build.make CMakeFiles/HoangVu.dir/Data_Structure/Trie/maxxor.cpp.i
+.PHONY : Data_Structure/Trie/maxxor.cpp.i
+
+Data_Structure/Trie/maxxor.s: Data_Structure/Trie/maxxor.cpp.s
+
+.PHONY : Data_Structure/Trie/maxxor.s
+
+# target to generate assembly for a file
+Data_Structure/Trie/maxxor.cpp.s:
+	$(MAKE) -f CMakeFiles/HoangVu.dir/build.make CMakeFiles/HoangVu.dir/Data_Structure/Trie/maxxor.cpp.s
+.PHONY : Data_Structure/Trie/maxxor.cpp.s
+
 Data_Structure/Trie/sec.o: Data_Structure/Trie/sec.cpp.o
 
 .PHONY : Data_Structure/Trie/sec.o
@@ -6840,6 +6867,9 @@ help:
 	@echo "... Data_Structure/Trie/Trie.o"
 	@echo "... Data_Structure/Trie/Trie.i"
 	@echo "... Data_Structure/Trie/Trie.s"
+	@echo "... Data_Structure/Trie/maxxor.o"
+	@echo "... Data_Structure/Trie/maxxor.i"
+	@echo "... Data_Structure/Trie/maxxor.s"
 	@echo "... Data_Structure/Trie/sec.o"
 	@echo "... Data_Structure/Trie/sec.i"
 	@echo "... Data_Structure/Trie/sec.s"

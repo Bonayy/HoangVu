@@ -26,6 +26,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/dell/HoangVu/Data Structure/SplayTree/SplayTree.cpp" "/home/dell/HoangVu/cmake-build-debug/CMakeFiles/HoangVu.dir/Data_Structure/SplayTree/SplayTree.cpp.o"
   "/home/dell/HoangVu/Data Structure/SqrtDecomposition/maxqueries.cpp" "/home/dell/HoangVu/cmake-build-debug/CMakeFiles/HoangVu.dir/Data_Structure/SqrtDecomposition/maxqueries.cpp.o"
   "/home/dell/HoangVu/Data Structure/Trie/Trie.cpp" "/home/dell/HoangVu/cmake-build-debug/CMakeFiles/HoangVu.dir/Data_Structure/Trie/Trie.cpp.o"
+  "/home/dell/HoangVu/Data Structure/Trie/maxxor.cpp" "/home/dell/HoangVu/cmake-build-debug/CMakeFiles/HoangVu.dir/Data_Structure/Trie/maxxor.cpp.o"
   "/home/dell/HoangVu/Data Structure/Trie/sec.cpp" "/home/dell/HoangVu/cmake-build-debug/CMakeFiles/HoangVu.dir/Data_Structure/Trie/sec.cpp.o"
   "/home/dell/HoangVu/Data Structure/segmenttree/Area.cpp" "/home/dell/HoangVu/cmake-build-debug/CMakeFiles/HoangVu.dir/Data_Structure/segmenttree/Area.cpp.o"
   "/home/dell/HoangVu/Data Structure/segmenttree/countdfr.cpp" "/home/dell/HoangVu/cmake-build-debug/CMakeFiles/HoangVu.dir/Data_Structure/segmenttree/countdfr.cpp.o"

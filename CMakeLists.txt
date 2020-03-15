@@ -249,4 +249,4 @@ add_executable(HoangVu
         "Thay Vong/sp08/recmin.cpp"
         "Thay Vong/sp08/shortseq.cpp"
         "Thay Vong/sp08/subarr.cpp"
-        "Thay Vong/sp08/subrectmax.cpp")
+        "Thay Vong/sp08/subrectmax.cpp" "Data Structure/Trie/maxxor.cpp")
