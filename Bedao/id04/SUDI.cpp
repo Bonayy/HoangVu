@@ -45,41 +45,44 @@ int main(){
         spt[i][0] = {a[i], a[i]};
     }
     pre_calc(); mp[a[0]] = -1;
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         int l = mp[a[i]] + 1, r = i, m;
         int pre, suf;
-        while (l <= r){
+        while (l <= r) {
             m = (l + r) / 2;
-            if (get_min(m, i) == a[i]){
-                pre = m; r = m - 1;
-            }
-            else l = m + 1;
+            if (get_min(m, i) == a[i]) {
+                pre = m;
+                r = m - 1;
+            } else l = m + 1;
         }
-        l = i; r = n - 1;
-        while (l <= r){
+        l = i;
+        r = n - 1;
+        while (l <= r) {
             m = (l + r) / 2;
-            if (get_min(i, m) == a[i]){
-                suf = m; l = m + 1;
-            }
-            else r = m - 1;
+            if (get_min(i, m) == a[i]) {
+                suf = m;
+                l = m + 1;
+            } else r = m - 1;
         }
         //cout << pre << ' ' << suf << '\n';
         ans -= 1ll * (suf - i + 1) * (i - pre + 1) * a[i];
-        l = mp[a[i]] + 1; r = i;
-        while (l <= r){
+        l = mp[a[i]] + 1;
+        r = i;
+        while (l <= r) {
             m = (l + r) / 2;
-            if (get_max(m, i) == a[i]){
-                pre = m; r = m - 1;
-            }
-            else l = m + 1;
+            if (get_max(m, i) == a[i]) {
+                pre = m;
+                r = m - 1;
+            } else l = m + 1;
         }
-        l = i; r = n - 1;
-        while (l <= r){
+        l = i;
+        r = n - 1;
+        while (l <= r) {
             m = (l + r) / 2;
-            if (get_max(i, m) == a[i]){
-                suf = m; l = m + 1;
-            }
-            else r = m - 1;
+            if (get_max(i, m) == a[i]) {
+                suf = m;
+                l = m + 1;
+            } else r = m - 1;
         }
         //cout << pre << ' ' << suf << "\n\n";
         ans += 1ll * (suf - i + 1) * (i - pre + 1) * a[i];

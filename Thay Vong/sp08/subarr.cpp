@@ -55,16 +55,21 @@ bool chkmin(T &a, const _T &b){
 
 const int N = 4e5 + 5;
 int a[N], cnt[N];
+ii cmp[N];
 
 int main(){
-    init(); open();
+    init(); //open();
     int n, k; cin >> n >> k;
-    for (int i = 1; i <= n; i++) cin >> a[i];
-    set <int> s(a + 1, a + n + 1);
-    vec <int> cmp(all(s)); cnt[0] = 1;
-    ll ans = 0;
-    for (int i = 1; i <= n; i++)
-        a[i] = lb(all(cmp), a[i]) - cmp.begin() + 1;
+    for (int i = 1; i <= n; i++){
+        cin >> a[i]; cmp[i] = {a[i], i};
+    }
+    sort(cmp + 1, cmp + n + 1);
+    a[cmp[1].second] = 1;
+    for (int i = 2; i <= n; i++)
+        if (cmp[i].first == cmp[i - 1].first)
+            a[cmp[i].second] = a[cmp[i - 1].second];
+        else a[cmp[i].second] = a[cmp[i - 1].second] + 1;
+    cnt[0] = 1; ll ans = 0;
     for (int i = 1, cur = (k == 1), j = 0; i <= n; i++){
         cur -= --cnt[a[i - 1]] == k - 1;
         while (j < n && cur == 0)
