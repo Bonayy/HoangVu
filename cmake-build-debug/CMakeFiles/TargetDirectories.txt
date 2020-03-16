@@ -1,3 +1,0 @@
-/home/dell/HoangVu/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/dell/HoangVu/cmake-build-debug/CMakeFiles/HoangVu.dir
-/home/dell/HoangVu/cmake-build-debug/CMakeFiles/edit_cache.dir
