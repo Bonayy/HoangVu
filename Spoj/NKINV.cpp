@@ -15,8 +15,7 @@ int get(int i){
 
 int main(){
     ios::sync_with_stdio(false); cin.tie(0);
-    memset(bit, 0, sizeof bit);
-    cin >> n;
+    memset(bit, 0, sizeof bit); cin >> n;
     for (int i = 1; i <= n; i++) cin >> a[i];
     for (int i = n; i > 0; i--){
         kq += get(a[i]);
