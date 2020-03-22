@@ -50,7 +50,7 @@ int main(){
     build(1, 1, n); int q, l, r; cin >> q;
     while (q--){
         cin >> l >> r;
-        int color =  query(1, l, r);
+        int color = query(1, l, r);
         if (color > 0) cout << "yes " << color << '\n';
         else cout << "no\n";
     }
