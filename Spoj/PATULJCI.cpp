@@ -12,9 +12,7 @@ vector <int> pos[C];
  
 int cnt_occ(int l, int r, int c){
     if (c == 0) return 0;
-    auto posr = ub(all(pos[c]), r);
-    auto posl = lb(all(pos[c]), l);
-    return posr - posl;
+    return ub(all(pos[c]), r) - lb(all(pos[c]), l);
 }
  
 void build(int i, int l, int r){
