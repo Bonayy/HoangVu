@@ -1,6 +1,4 @@
 #include <bits/stdc++.h>
-#include <ext/rope>
-using namespace __gnu_cxx;
 using namespace std;
 
 struct Trie{

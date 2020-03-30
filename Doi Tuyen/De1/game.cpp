@@ -21,28 +21,26 @@ bool union_set(int u, int v){
 }
 
 void solve(){
-    int n; cin >> n;
+    int n; scanf("%d", &n);
     for (int i = 1; i <= n; i++) anc[i] = i, rnk[i] = 0;
     int q = n * (n - 1) / 2;
-    for (int i = 1; i <= q; i++) cin >> que[i].fi >> que[i].se;
+    for (int i = 1; i <= q; i++) scanf("%d%d", &que[i].fi, &que[i].se);
     for (int i = 1; i <= q; i++){
         if (i == q){
-            cout << "1\n"; continue;
+            printf("1\n"); continue;
         }
         int a = find_set(que[i].fi), b = find_set(que[i].se);
         int c = find_set(que[q].fi), d = find_set(que[q].se);
-        if (a == b || (a == c && b == d) || (a == d && b == c)){
-            cout << "0 "; continue;
+        if (a == b || (a == c && b == d) || (a == d && b == c))
+            printf("0 ");
+        else {
+            union_set(a, b); printf("1 ");
         }
-        union_set(a, b); cout << "1 ";
     }
-    
 }
 
 int main(){
     freopen("game.inp", "r", stdin);
     freopen("game.out", "w", stdout);
-    ios_base::sync_with_stdio(false);
-    cin.tie(0); cout.tie(0);
-    int t; cin >> t; while (t--) solve();
+    int t; scanf("%d", &t); while (t--) solve();
 }
