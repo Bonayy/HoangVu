@@ -35,8 +35,10 @@ int main(){
     for (auto &e : edges) 
         cin >> e.u >> e.v >> e.w;
     sort(edges.begin(), edges.end());
+    int ans = INT_MIN;
     for (auto e : edges){
-        n -= union_set(e.u, e.v);
-        if (n == 1) return cout << e.w << '\n', 0;
+        if (union_set(e.u, e.v))
+            ans = max(ans, e.w);
     }
+    cout << ans << '\n';
 }

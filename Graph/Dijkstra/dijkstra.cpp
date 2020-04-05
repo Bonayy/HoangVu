@@ -52,11 +52,9 @@ struct Graph{
 };
 
 int main(){
-    freopen("dijkstra.inp", "rt", stdin);
-    freopen("dijkstra.out", "wt", stdout);
     int n; cin >> n;
     Graph G(n); G.Enter();
-    G.minPath(2);
+    G.minPath(1);
     cerr << clock();
     return 0;
 }
