@@ -13,9 +13,8 @@ vector <edge> adj[N];
 int dis[N], n, m;
 
 int dijkstra(int s, int t){
-    priority_queue <edge> pq;
-    dis[s] = INT_MAX;
-    pq.push({s, dis[s]});
+    priority_queue <edge> pq; 
+    dis[s] = INT_MAX; pq.push({s, dis[s]});
     while (!pq.empty()){
         auto cur = pq.top(); pq.pop();
         if (cur.w < dis[cur.u]) continue;
@@ -35,5 +34,5 @@ int main(){
         adj[u].push_back({v, w});
         adj[v].push_back({u, w});
     }
-    cout << dijkstra(s, t) << '\n';
+    cout << (m - 1) / min(dijkstra(s, t), 50) + 1;
 }
