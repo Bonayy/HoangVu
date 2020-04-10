@@ -10,7 +10,6 @@ void solve(){
         t = t / temp;
         temp = __gcd(k, t);
     }
-    cout << t << '\n';
     while (q--){
         cin >> u >> v;
         if (u >= v || (v - u) % t != 0)
