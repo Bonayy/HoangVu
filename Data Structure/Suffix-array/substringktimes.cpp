@@ -1,12 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 2e5 + 5;
-
 namespace suffixarray{
-    int cnt[N], sa[N], x[N], y[N], lcp[N], n;
-    void build(string s){
-        s += char(1); n = s.size();
+    static const int N = 1e6 + 5;
+    int cnt[N], sa[N], x[N], y[N], lcp[N];
+    int* build_sa(string s){
+        s += char(1); int n = s.size();
         for (int i = 0; i < n; i++) cnt[s[i]]++;
         for (int i = 1; i < 256; i++) cnt[i] += cnt[i - 1];
         for (int i = n - 1; ~i; i--) sa[--cnt[s[i]]] = i;
@@ -34,6 +33,10 @@ namespace suffixarray{
             swap(x, y);
         }
         rotate(sa, sa + 1, sa + n); n--;
+        return sa;
+    }
+    int* build_lcp(string s){
+        int n = s.size();
         for (int i = 0; i < n; i++) x[sa[i]] = i;
         for (int i = 0, k = 0; i < n; i++, k ? k-- : 0){
             if (x[i] == n - 1){
@@ -43,10 +46,30 @@ namespace suffixarray{
             while (max(i, j) + k < n && s[i + k] == s[j + k]) k++;
             lcp[x[i]] = k;
         }
+        return lcp;
     }
 };
 
 int main(){
-    string s; cin >> s;
-    
+    using namespace suffixarray;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
+    string s; int k, n; cin >> k >> n >> s;
+    if (k == 1) return cout << n << '\n', 0;
+    build_sa(s); build_lcp(s); k--;
+    deque <int> dq; int ans = 0;
+    for (int i = 0; i < k - 1; i++){
+        while (!dq.empty() && lcp[dq.back()] >= lcp[i])
+            dq.pop_back();
+        dq.push_back(i);
+    }
+    for (int i = k; i < n; i++){
+        while (!dq.empty() && dq.front() <= i - k)
+            dq.pop_front();
+        while (!dq.empty() && lcp[dq.back()] >= lcp[i])
+            dq.pop_back();
+        dq.push_back(i);
+        ans = max(ans, lcp[dq.front()]);
+    }
+    cout << ans << '\n';
 }

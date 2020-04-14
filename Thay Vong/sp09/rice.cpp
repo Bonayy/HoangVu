@@ -6,7 +6,9 @@ const int N = 1e5 + 5;
 int a[N]; ll sum[N];
 
 int main(){
-    int n, l, b, ans = 0; cin >> n >> l >> b;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
+    int n, l, ans = 0; ll b; cin >> n >> l >> b;
     for (int i = 1; i <= n; i++) cin >> a[i];
     sort(a + 1, a + n + 1);
     for (int i = 1; i <= n; i++) sum[i] = sum[i - 1] + a[i];

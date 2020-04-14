@@ -1,12 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 2e5 + 5;
-
 namespace suffixarray{
-    int cnt[N], sa[N], x[N], y[N], lcp[N], n;
-    void build(string s){
-        s += char(1); n = s.size();
+    static const int N = 1e6 + 5;
+    int cnt[N], sa[N], x[N], y[N], lcp[N];
+    int* build_sa(string s){
+        s += char(1); int n = s.size();
         for (int i = 0; i < n; i++) cnt[s[i]]++;
         for (int i = 1; i < 256; i++) cnt[i] += cnt[i - 1];
         for (int i = n - 1; ~i; i--) sa[--cnt[s[i]]] = i;
@@ -34,19 +33,36 @@ namespace suffixarray{
             swap(x, y);
         }
         rotate(sa, sa + 1, sa + n); n--;
+        return sa;
+    }
+    int* build_lcp(string s){
+        int n = s.size();
         for (int i = 0; i < n; i++) x[sa[i]] = i;
         for (int i = 0, k = 0; i < n; i++, k ? k-- : 0){
             if (x[i] == n - 1){
-                k = 0; continue;
+                k = 0; lcp[x[i]] = 0; continue;
             }
             int j = sa[x[i] + 1];
             while (max(i, j) + k < n && s[i + k] == s[j + k]) k++;
             lcp[x[i]] = k;
         }
+        return lcp;
     }
 };
 
 int main(){
-    string s; cin >> s;
-    
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
+    string s, t; cin >> s >> t;
+    string x = s + char(1) + t;
+    using namespace suffixarray;
+    build_sa(x); build_lcp(x);
+    int res = 0;
+    for (int i = 0; i < x.size(); i++){
+        if (sa[i] < s.size() && sa[i + 1] > s.size())
+            res = max(res, lcp[i]);
+        if (sa[i] > s.size() && sa[i + 1] < s.size())
+            res = max(res, lcp[i]);
+    }
+    cout << res << '\n';
 }
