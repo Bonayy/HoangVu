@@ -10,6 +10,7 @@ using ll = long long;
 const ll inf = 0x3f3f3f3f3f3f3f3f;
 const int N = 50005;
 ll dis[N]; int t1[N], t2[N];
+vector <int> tt;
  
 struct edge{
     int v; ll w;
@@ -21,11 +22,22 @@ struct edge{
 priority_queue <edge> pq;
 vector <edge> adj[N], res[N];
 map <int, int> mp1, mp2;
+int n, m, s, t, u, v, w;
+ 
+void dfs(int cur){
+    tt.push_back(cur);
+    if (cur == t){
+        cout << tt.size() << ' ';
+        for (int x : tt) cout << x << ' ';
+        cout << '\n';
+    }
+    for (auto e : adj[cur]) dfs(e.v);
+    tt.pop_back();
+}
  
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
-    int n, m, s, t, u, v, w;
     cin >> n >> m >> s >> t;
     for (int i = 0; i < m; i++){
         cin >> u >> v >> w;
@@ -72,8 +84,7 @@ int main(){
             }
     }
     if (dis[t] == inf) return cout << -1, 0;
-    temp = t; vector <int> tt;
-    mp2.clear(); mp1.clear();
+    temp = t; mp2.clear(); mp1.clear();
     while (temp != s){
         mp2[temp] = t2[temp]; temp = t2[temp];
     }
@@ -90,11 +101,18 @@ int main(){
             mp1.erase(mp2[x]); mp2.erase(x);
         }
     ll ans = 0;
+    for (int i = 1; i <= n; i++) adj[i].clear();
     for (int i = 1; i <= n; i++){
         for (auto e : res[i]){
-            if (mp1[i] == e.v) ans += e.w;
-            if (mp2[i] == e.v) ans += e.w;
+            if (mp1[i] == e.v){
+                ans += e.w; 
+                adj[e.v].push_back({i, 0});
+            }
+            if (mp2[i] == e.v){
+                ans += e.w; 
+                adj[e.v].push_back({i, 0});
+            }
         }
     }
-    cout << ans << '\n';
+    cout << ans << '\n'; tt.clear(); dfs(s);
 }

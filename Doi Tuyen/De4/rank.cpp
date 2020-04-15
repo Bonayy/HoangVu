@@ -7,7 +7,7 @@ int main(){
     freopen("rank.inp", "r", stdin);
     freopen("rank.out", "w", stdout);
     int n, k; cin >> n >> k;
-    vector <pair <int, char>> a(n);
+    vector <pair <int, string>> a(n);
     for (auto &qq : a) cin >> qq.second >> qq.first;
     sort(a.rbegin(), a.rend());
     for (int i = 0; i < k; i++)
