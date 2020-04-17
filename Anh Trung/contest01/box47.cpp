@@ -3,6 +3,7 @@ using namespace std;
 
 #define all(v) (v).begin(), (v).end()
 #define ub upper_bound
+#define lb lower_bound
 const int N = 4e5 + 5;
 struct que{
     int type, a, b;
