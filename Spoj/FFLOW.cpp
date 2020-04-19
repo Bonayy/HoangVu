@@ -37,7 +37,7 @@ void relabel(int u){
 }
 
 void discharge(int u){
-    int i = ptr[u];
+    int &i = ptr[u];
     while (exc[u]){
         if (i == 0){
             relabel(u); i = head[u]; 
@@ -90,7 +90,7 @@ int main(){
     for (int i = 1, u, v, c; i <= m; i++){
         cin >> u >> v >> c;
         g[i] = {v, head[u], i + m, c};
-        g[i + m] = {u, head[v], i, 0};
+        g[i + m] = {u, head[v], i, c};
         head[u] = i; head[v] = i + m;
     }
     cout << max_flow() << '\n';

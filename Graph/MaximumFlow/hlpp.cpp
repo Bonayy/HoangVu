@@ -68,7 +68,7 @@ void relabel(int u){
 }
 
 void discharge(int u){
-    int i = ptr[u];
+    int &i = ptr[u];
     while (exc[u]){
         if (i == 0){
             relabel(u); i = head[u]; 

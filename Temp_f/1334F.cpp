@@ -8,7 +8,7 @@ const ll inf = 0x3f3f3f3f3f3f3f3f;
 
 template <class T>
 void read_n(T *a, int n){
-    for (int i = 0; i < n; i++) cin >> a[i];
+    for (int i = 0; i < n; cin >> a[i++]);
 }
 
 template <class X, class Y>
