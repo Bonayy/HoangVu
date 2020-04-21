@@ -114,7 +114,7 @@ void print(const bigint &a){
     else {
         cout << s[0] << s[1] << s[2] << s[3] << s[4];
         cout << "...";
-        cout << s[size(s) - 5] << s[size(s) - 4] << s[size(s) - 3] << s[size(s) - 2] << s[size(s) - 1] << '\n';
+        cout << s[s.size() - 5] << s[s.size() - 4] << s[s.size() - 3] << s[s.size() - 2] << s[s.size() - 1] << '\n';
     }
 }
 

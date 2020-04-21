@@ -110,6 +110,8 @@ bigint dp[205][105], pow3[105];
 char s[205]; int n, k, order[256];
 
 int main(){
+    freopen("btn3.inp", "r", stdin);
+    freopen("btn3.out", "w", stdout);
     scanf("%d%d%s", &n, &k, s + 1);
     pow3[0] = dp[0][0] = big(1);
     for (int i = 1; i <= n; i++){

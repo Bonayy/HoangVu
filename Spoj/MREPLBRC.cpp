@@ -2,8 +2,8 @@
 using namespace std;
 
 using ll = long long;
-const char *open = "([{";
-const char *close = ")]}";
+const char open[] = "([{";
+const char close[] = ")]}";
 const int mod = 1e5;
 
 ll dp[205][205]; char s[205]; int n;

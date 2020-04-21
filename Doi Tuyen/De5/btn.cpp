@@ -105,35 +105,39 @@ namespace big_integer{
     }
 }
 
+#define fi first
+#define se second
 using namespace big_integer;
-bigint dp[205][105], pow3[105];
-char s[205]; int n, k, order[256];
+using iii = tuple <int, int, int>;
+
+char op[] = "([{", cl[] = ")]}", s[205];
+map <iii, bigint> dp;
+
+bigint calc(int l, int r, int k){
+    if (k < 0) return big(0);
+    if (k == 0) return big(l > r);
+    if (l > r) return big(k == 0);
+    if (k > (r - l + 1) / 2) return big(0);
+    if (dp.count(make_tuple(l, r, k))) 
+        return dp[make_tuple(l, r, k)];
+    dp[make_tuple(l, r, k)] = big(0);
+    auto it = dp.find(make_tuple(l, r, k));
+    for (int m = l + 1; m <= r; m += 2)
+        for (int t = 0; t < 3; t++)
+            if (s[l] == op[t] || s[l] == '?')
+                if (s[m] == cl[t] || s[m] == '?'){
+                    for (int nk = 0; nk < k; nk++)
+                        it->se += calc(l + 1, m - 1, k - 1) * calc(m + 1, r, nk);
+                    for (int nk = 0; nk < k - 1; nk++)
+                        it->se += calc(l + 1, m - 1, nk) * calc(m + 1, r, k);
+                    it->se += calc(l + 1, m - 1, k - 1) * calc(m + 1, r, k);
+                }
+    return it->se;
+}
 
 int main(){
-    scanf("%d%d%s", &n, &k, s + 1);
-    pow3[0] = dp[0][0] = big(1);
-    for (int i = 1; i <= n; i++){
-        pow3[i] = pow3[i - 1] * big(3);
-        for (int j = 0; j <= k; j++){
-            if (j > 0) dp[i][j] = dp[i - 1][j - 1];
-            if (j < k) dp[i][j] += dp[i - 1][j + 1];
-        }
-    }
-    order['('] = 1; order[')'] = 4;
-    order['['] = 2; order[']'] = 5;
-    order['{'] = 3; order['}'] = 6;
-    stack <char> cur; bigint res = big(1);
-    for (int i = 1, dep = 0; i < n; i++)
-        if (order[s[i]] <= 3){
-            res += big(order[s[i]] - 1) * dp[n - i][++dep] * pow3[(n - i - dep) / 2];
-            if (!cur.empty() && cur.top() < s[i])
-                res += dp[n - i][dep - 2] * pow3[(n - i - dep) / 2 + 1];
-            cur.push(s[i]);
-        }
-        else {
-            if (dep < k) 
-                res += big(order[s[i]] - 3) * dp[n - i][dep + 1] * pow3[(n - i - dep - 1) / 2];
-            cur.pop(); dep--;
-        }
-    cout << res << '\n';
+    freopen("btn.inp", "r", stdin);
+    freopen("btn.out", "w", stdout);
+    int n, k; cin >> n >> k >> s;
+    cout << calc(0, n - 1, k) << '\n';
 }

@@ -106,34 +106,48 @@ namespace big_integer{
 }
 
 using namespace big_integer;
-bigint dp[205][105], pow3[105];
-char s[205]; int n, k, order[256];
+bigint dp[105][105]; bool open[105];
 
-int main(){
-    scanf("%d%d%s", &n, &k, s + 1);
-    pow3[0] = dp[0][0] = big(1);
-    for (int i = 1; i <= n; i++){
-        pow3[i] = pow3[i - 1] * big(3);
-        for (int j = 0; j <= k; j++){
-            if (j > 0) dp[i][j] = dp[i - 1][j - 1];
-            if (j < k) dp[i][j] += dp[i - 1][j + 1];
-        }
+void print(const bigint &a){
+    string s = to_string(a);
+    if (s.size() <= 10) cout << s << '\n';
+    else {
+        cout << s[0] << s[1] << s[2] << s[3] << s[4];
+        cout << "...";
+        cout << s[s.size() - 5] << s[s.size() - 4] << s[s.size() - 3] << s[s.size() - 2] << s[s.size() - 1] << '\n';
     }
-    order['('] = 1; order[')'] = 4;
-    order['['] = 2; order[']'] = 5;
-    order['{'] = 3; order['}'] = 6;
-    stack <char> cur; bigint res = big(1);
-    for (int i = 1, dep = 0; i < n; i++)
-        if (order[s[i]] <= 3){
-            res += big(order[s[i]] - 1) * dp[n - i][++dep] * pow3[(n - i - dep) / 2];
-            if (!cur.empty() && cur.top() < s[i])
-                res += dp[n - i][dep - 2] * pow3[(n - i - dep) / 2 + 1];
-            cur.push(s[i]);
+}
+
+bigint calc(int n, int k){
+    dp[0][0] = big(1);
+    for (int i = 1; i <= n; i++){
+        if (open[i]){
+            dp[i][0] = big(0);
+            for (int j = 1; j <= k; j++)
+                dp[i][j] = dp[i - 1][j - 1];
         }
         else {
-            if (dep < k) 
-                res += big(order[s[i]] - 3) * dp[n - i][dep + 1] * pow3[(n - i - dep - 1) / 2];
-            cur.pop(); dep--;
+            dp[i][0] = dp[i - 1][1];
+            dp[i][k] = dp[i - 1][k - 1];
+            for (int j = 1; j < k; j++)
+                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j + 1];
         }
-    cout << res << '\n';
+    }
+    return dp[n][0];
+}
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0); int n, k;
+    freopen("bt4.inp", "r", stdin);
+    freopen("bt4.out", "w", stdout);
+    while (cin >> n >> k){
+        for (int i = 1; i <= n; i++) open[i] = false;
+        char x; int pos; open[1] = true;
+        while (cin >> x){
+            if (x == '}') break;
+            cin >> pos; open[pos] = true;
+        }
+        print(calc(n, k) - calc(n, k - 1));
+    }
 }
