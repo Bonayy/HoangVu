@@ -8,12 +8,12 @@ class implicit_array{
 private:
     class node{
     public:
-        int pr, sz = 1, ma, val;
+        int pr, sz = 1, val;
         node *l = NULL, *r = NULL;
 
         node(): pr(rng()){}
         
-        node(int val): val(val), pr(rng()), ma(val){}
+        node(int val): val(val), pr(rng()){}
 
         ~node(){
             delete l; delete r;
@@ -24,15 +24,8 @@ private:
         return pt ? pt-> sz : 0;
     }
 
-    int ma(node *pt){
-        return pt ? pt->ma : ninf;
-    }
-
     void update(node *pt){
-        if (pt){
-            pt->sz = sz(pt->l) + sz(pt->r) + 1;
-            pt->ma = max({pt->val, ma(pt->l), ma(pt->r)});
-        }
+        if (pt) pt->sz = sz(pt->l) + sz(pt->r) + 1;
     }
 
     node *merge(node *l, node *r){
@@ -75,9 +68,21 @@ public:
     }
 
     void pop_back(){
-        node *l, *r;
-        split(root, size() - 1, l, r);
-        root = l; delete r;
+        assert(size());
+        node *m;
+        split(root, size() - 1, root, m);
+        delete m;
+    }
+
+    void push_front(int val){
+        root = merge(new node(val), root);
+    }
+
+    void pop_front(){
+        assert(size());
+        node *m;
+        split(root, 1, m, root);
+        delete m;
     }
 
     void insert(int key, int val){
@@ -104,13 +109,18 @@ public:
         return res;
     }
 
-    int get_max(int a, int b){
+    void query1(int a, int b){
         node *l, *m, *r;
         split(root, b, m, r);
         split(m, a, l, m);
-        int res = ma(m);
-        root = merge(merge(l, m), r);
-        return res;
+        root = merge(m, merge(l, r));
+    }
+
+    void query2(int a, int b){
+        node *l, *m, *r;
+        split(root, b, m, r);
+        split(m, a, l, m);
+        root = merge(merge(l, r), m);
     }
 };
 
@@ -118,10 +128,16 @@ int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
     implicit_array a; 
-    int q, u, v; char cmd; cin >> q;
-    while (q--){
-        cin >> cmd >> u >> v;
-        if (cmd == 'A') a.insert(v - 1, u);
-        else cout << a.get_max(u - 1, v) << '\n';
+    int n, q; cin >> n >> q;
+    for (int i = 1, x; i <= n; i++){
+        cin >> x; a.push_back(x);
     }
+    for (int i = 1, t, l, r; i <= q; i++){
+        cin >> t >> l >> r;
+        if (t == 1) a.query1(l - 1, r);
+        else a.query2(l - 1, r);
+    }
+    cout << abs(a[0] - a[n - 1]) << '\n';
+    for (int i = 0; i < n; i++) 
+        cout << a[i] << " \n"[i == n - 1];
 }

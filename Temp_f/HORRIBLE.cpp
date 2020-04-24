@@ -1,19 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+using ll = long long;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int ninf = 0xc0c0c0c0;
 
-class implicit_array{
+class implicit_treap{
 private:
     class node{
     public:
-        int pr, sz = 1, ma, val;
+        int pr, sz = 1; ll val, sum, lz = 0;
         node *l = NULL, *r = NULL;
 
         node(): pr(rng()){}
         
-        node(int val): val(val), pr(rng()), ma(val){}
+        node(int val): val(val), pr(rng()), sum(val){}
 
         ~node(){
             delete l; delete r;
@@ -21,21 +22,33 @@ private:
     } *root;
 
     int sz(node *pt){
-        return pt ? pt-> sz : 0;
+        return pt ? pt->sz : 0;
     }
 
-    int ma(node *pt){
-        return pt ? pt->ma : ninf;
+    ll sum(node *pt){
+        return pt ? pt->sum : 0;
     }
 
     void update(node *pt){
         if (pt){
+            push(pt->l); push(pt->r);
             pt->sz = sz(pt->l) + sz(pt->r) + 1;
-            pt->ma = max({pt->val, ma(pt->l), ma(pt->r)});
+            pt->sum = sum(pt->l) + sum(pt->r) + pt->val;
+        }
+    }
+
+    void push(node *pt){
+        if (pt && pt->lz){
+            pt->val += pt->lz;
+            pt->sum += pt->lz * pt->sz;
+            if (pt->l) pt->l->lz += pt->lz;
+            if (pt->r) pt->r->lz += pt->lz;
+            pt->lz = 0;
         }
     }
 
     node *merge(node *l, node *r){
+        push(l); push(r);
         if (!l || !r) return l ? l : r;
         node *pt;
         if (l->pr > r->pr){
@@ -48,6 +61,7 @@ private:
     }
 
     void split(node *pt, int key, node *&l, node *&r){
+        push(pt);
         if (!pt) return void(l = r = NULL);
         if (sz(pt->l) < key){
             split(pt->r, key - sz(pt->l) - 1, pt->r, r);
@@ -60,9 +74,9 @@ private:
     }
 
 public:
-    implicit_array(): root(NULL){}
+    implicit_treap(): root(NULL){}
 
-    ~implicit_array(){
+    ~implicit_treap(){
         delete root;
     }
 
@@ -75,9 +89,21 @@ public:
     }
 
     void pop_back(){
-        node *l, *r;
-        split(root, size() - 1, l, r);
-        root = l; delete r;
+        assert(size());
+        node *m;
+        split(root, size() - 1, root, m);
+        delete m;
+    }
+
+    void push_front(int val){
+        root = merge(new node(val), root);
+    }
+
+    void pop_front(){
+        assert(size());
+        node *m;
+        split(root, 1, m, root);
+        delete m;
     }
 
     void insert(int key, int val){
@@ -94,34 +120,51 @@ public:
         delete m;
     }
 
-    int& operator [] (const int &key){
+    ll& operator [] (const int &key){
         assert(key < size());
         node *l, *m, *r;
         split(root, key + 1, m, r);
         split(m, key, l, m);
-        int &res = m->val;
+        ll &res = m->val;
+        root = merge(merge(l, m), r);
+        return res;
+    }
+    
+    ll get_sum(int a, int b){
+        node *l, *m, *r;
+        split(root, b, m, r);
+        split(m, a, l, m);
+        ll res = sum(m);
         root = merge(merge(l, m), r);
         return res;
     }
 
-    int get_max(int a, int b){
+    void update(int a, int b, ll val){
         node *l, *m, *r;
         split(root, b, m, r);
         split(m, a, l, m);
-        int res = ma(m);
+        if (m) m->lz += val;
         root = merge(merge(l, m), r);
-        return res;
     }
 };
+
+void solve(){
+    int n, q, cmd, l, r; cin >> n >> q; 
+    implicit_treap a;
+    for (int i = 1; i <= n; i++) 
+        a.push_back(0);
+    while (q--){
+        cin >> cmd >> l >> r;
+        if (cmd) cout << a.get_sum(l - 1, r) << '\n';
+        else {
+            cin >> cmd; a.update(l - 1, r, cmd);
+        }
+    }
+}
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
-    implicit_array a; 
-    int q, u, v; char cmd; cin >> q;
-    while (q--){
-        cin >> cmd >> u >> v;
-        if (cmd == 'A') a.insert(v - 1, u);
-        else cout << a.get_max(u - 1, v) << '\n';
-    }
+    int t; cin >> t; while (t--) solve();
+    
 }

@@ -9,7 +9,7 @@ int main(){
     int k; string s; cin >> k >> s;
     char mi = *min_element(s.begin(), s.end());
     char ma = *max_element(s.begin(), s.end());
-                    for (char c : s){
+    for (char c : s){
         int res = 1;
         for (char x = mi; x <= ma; x++)
             if (abs(x - c) <= k)
