@@ -44,6 +44,8 @@ void dfs_sol(int v, int p, bool cl){
 }
 
 int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
     cin >> n >> k;
     for (int i = 1, u, v; i < n; i++){
         cin >> u >> v; add_edge(u, v);
