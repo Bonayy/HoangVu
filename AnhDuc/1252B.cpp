@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-<<<<<<< HEAD
-=======
 struct modular{
     using ll = long long; ll val;
     static const int mod = 1e9 + 7;
@@ -104,7 +102,6 @@ void dfs(int u, int p){
     for (int v : adj[u]) if (v != p) dfs(v, u);
 }
 
->>>>>>> b969cce8d37618750f176a1d3fc2a142a971a0fa
 int main(){
     int n; cin >> n;
 }
