@@ -1,3 +1,5 @@
+/// find shortest from 1 to n such that p_k.w + d <= p_(k + 1).w where p_k is kth edge in the path
+/// Solution: Consider every edge as a vertice in a new graph G'
 #include <bits/stdc++.h>
 using namespace std;
 
