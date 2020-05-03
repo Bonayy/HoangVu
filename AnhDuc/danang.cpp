@@ -3,7 +3,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define debug(x) cout << #x << " = " << x
 #define all(v) (v).begin(), (v).end()
 #define lb lower_bound
 #define ub upper_bound
@@ -25,6 +24,8 @@ vector <int> adj[N];
 priority_queue <path> pq;
 
 int main(){
+    freopen("danang.inp", "r", stdin);
+    freopen("danang.out", "w", stdout);
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
     int n, m, d; cin >> n >> m >> d;
@@ -60,8 +61,8 @@ int main(){
                 pq.push({lst + nxt, dis[nxt]});
             }
         }
-        lst[2 * m + 1].w = cur.e->w + d;
-        auto it = lb(all(adj[cur.e->to]), 2 * m + 1, cmp);
+        lst[0].w = cur.e->w + d;
+        auto it = lb(all(adj[cur.e->to]), 0, cmp);
         if (it != adj[cur.e->to].end()){
             if (dis[*it] > cur.w + lst[*it].w){
                 dis[*it] = cur.w + lst[*it].w;
