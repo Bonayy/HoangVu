@@ -1,211 +1,144 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
-vector <int> a;
-struct Node{
-    int key;
-    Node* parent = nullptr;
-    Node* left = nullptr;
-    Node* right = nullptr;
-    Node(int key) : key(key){}
-};
 
-Node* root;
-//build tree from sorted array
-Node* buildTree(int lo, int hi, Node* parent){
-    if (lo > hi) return nullptr;
-    int mi = lo + (hi - lo) / 2;
-    Node *node = new Node(a[mi]);
-    node -> parent = parent;
-    node -> left = buildTree(lo, mi - 1, node);
-    node -> right = buildTree(mi + 1, hi, node);
-    return node;
-}
+template <class T>
+class splay_tree{
+private:
+    class node{
+    public:
+        T key; node *p = 0, *l = 0, *r = 0;
 
-//just find, not splay
-Node* findOnly(Node* node, const int& key){
-    if (node == nullptr) return nullptr;
-    if (key < node -> key)
-        return findOnly(node -> left, key);
-    if (key > node -> key)
-        return findOnly(node -> right, key);
-    return node;
-}
+        node(int key): key(key){}
 
-//find node include min value
-Node* minVal(){
-    Node* curr = root;
-    while (curr -> left != nullptr) curr = curr -> left;
-    return curr;
-}
-
-//just insert, not splay
-Node* insertOnly(Node* node, const int& key){
-    if (key == node -> key) return node;
-    else if (key > node -> key){
-        if (node -> right == nullptr){
-            Node* temp = new Node(key);
-            node -> right = temp;
-            temp -> parent = node;
-            return temp;
+        ~node(){
+            delete l; delete r;
         }
-        else return insertOnly(node -> right, key);
-    }
-    else{
-        if (node -> left == nullptr){
-            Node* temp = new Node(key);
-            node -> left = temp;
-            temp -> parent = node;
-            return temp;
+    } *root;
+    int sz = 0;
+
+    void lrot(node *x){
+        node *y = x->r;
+        if (y){
+            x->r = y->l; y->p = x->p;
+            if (y->l) y->l->p = x;
         }
-        else return insertOnly(node -> left, key);
+        if (!x->p) root = y;
+        else if (x == x->p->l) x->p->l = y;
+        else x->p->r = y;
+        if (y) y->l = x; x->p = y;
     }
-}
 
-//right rotation at y
-void rightRotate(Node* y){
-    Node* x = y -> left;
-    Node* w = y -> parent;
-    Node* z = x -> right;
-    if (w != nullptr){
-        if (w -> left != nullptr && w -> left -> key == y -> key){
-            w -> left = x;
+    void rrot(node *x){
+        node *y = x->l;
+        if (y){
+            x->l = y->r; y->p = x->p;
+            if (y->r) y->r->p = x;
         }
-        else w -> right = x;
+        if (!x->p) root = y;
+        else if (x == x->p->l) x->p->l = y;
+        else x->p->r = y;
+        if (y) y->r = x; x->p = y;
     }
-    if (z != nullptr) z -> parent = y;
-    y -> left = z;
-    x -> parent = w;
-    x -> right = y;
-    y -> parent = x;
-}
 
-//left rotation at x
-void leftRotate(Node* x){
-    Node* y = x -> right;
-    Node* w = x -> parent;
-    Node* z = y -> left;
-    if (w != nullptr){
-        if (w -> left != nullptr && w -> left -> key == x -> key){
-            w -> left = y;
-        }
-        else{
-            w -> right = y;
-        }
-    }
-    if (z != nullptr) z -> parent = x;
-    x -> right = z;
-    y -> left = x;
-    y -> parent = w;
-    x -> parent = y;
-}
-
-//right roller coaster at x
-void rightRoller(Node* x){
-    Node* y = x -> left;
-    rightRotate(x);
-    rightRotate(y);
-}
-
-//left roller coaster at x
-void leftRoller(Node* x){
-    Node* y = x -> right;
-    leftRotate(x);
-    leftRotate(y);
-}
-
-//right zigzag at x
-void rightZigzag(Node* x){
-    Node* y = x -> right;
-    rightRotate(y);
-    leftRotate(x);
-}
-
-//left zigzag at x
-void leftZigzag(Node* x){
-    Node* y = x -> left;
-    leftRotate(y);
-    rightRotate(x);
-}
-
-//main action : splay the tree
-void splay(Node* x){
-    if (x -> parent == nullptr) return;
-    Node* y = x -> parent;
-    if (y -> parent == nullptr){
-        if (y -> left != nullptr && y -> left -> key == x -> key)
-            rightRotate(y);
-        else leftRotate(y);
-    }
-    else{
-        Node* z = y -> parent;
-        if (z -> left != nullptr && z -> left -> key == y -> key){
-            if (y -> left != nullptr && y -> left -> key == x -> key)
-                rightRoller(z);
-            else leftZigzag(z);
-        }
-        else{
-            if (y -> right != nullptr && y -> right -> key == x -> key)
-                leftRoller(z);
-            else rightZigzag(z);
-        }
-    }
-    splay(x);
-}
-
-//insert a node and splay
-void insertNode(const int& key){
-    Node* temp = insertOnly(root, key);
-    splay(temp);
-    root = temp;
-}
-
-//delete a node and splay
-void deleteNode(const int& key){
-    if (findOnly(root, key) == nullptr) return;
-    root = findOnly(root, key);
-    Node* y = root -> left;
-    y -> parent = nullptr;
-    if (y -> right != nullptr){
-        Node* w = y -> right;
-        while(w -> right != nullptr) w = w -> right;
-        splay(w);
-        w -> right = root -> right;
-        if (root -> right != nullptr) root -> right -> parent = w;
-        root = w;
-    }
-    else{
-        y -> right = root -> right;
-        if (root -> right != nullptr) root -> right -> parent = y;
-        root = y;
-    }
-}
-
-void preoder(Node* node){
-    if (node == nullptr) return;
-    cout << node -> key << ' ';
-    preoder(node -> left);
-    preoder(node -> right);
-}
-
-int main(){
-    int t; cin >> t;
-    while (t--){
-        int n, m; cin >> n >> m;
-        a.resize(n);
-        for (int i = 0; i < n; i++) cin >> a[i];
-        sort(a.begin(), a.end());
-        root = buildTree(0, n - 1, nullptr);
-        int x;
-        while (m--){
-            cin >> x;
-            if (findOnly(root, x) == nullptr) cout << "NO\n";
-            else{
-                cout << "YES\n"; deleteNode(x);
+    void splay(node *x){
+        while (x->p){
+            if (!x->p->p){
+                if (x == x->p->l) rrot(x->p);
+                else lrot(x->p);
+            }
+            else {
+                if (x == x->p->l){
+                    if (x->p == x->p->p->l){
+                        rrot(x->p->p); rrot(x->p);
+                    }
+                    else {
+                        rrot(x->p); lrot(x->p);
+                    }
+                }
+                else {
+                    if (x->p == x->p->p->l){
+                        lrot(x->p); rrot(x->p);
+                    }
+                    else {
+                        lrot(x->p->p); lrot(x->p);
+                    }
+                }
             }
         }
     }
-    return 0;
-}
 
+    void inorder(node *x){
+        if (!x) return;
+        inorder(x->l);
+        cout << x->key << '\n';
+        inorder(x->r);
+    }
+
+public:
+    splay_tree(): root(0){}
+
+    ~splay_tree(){
+        delete root;
+    }
+
+    int size() const {
+        return sz;
+    }
+
+    bool find(const T &key){
+        node *x = root;
+        while (x){
+            if (x->key == key) return 1;
+            if (x->key < key) x = x->r;
+            else x = x->l;
+        }
+        return 0;
+    }
+
+    bool insert(const T &key){
+        node *x = root, *y = 0;
+        while (x){
+            y = x;
+            if (x->key == key) return 0;
+            if (x->key < key) x = x->r;
+            else x = x->l;
+        }
+        x = new node(key); x->p = y;
+        if (!y) root = x;
+        else if (x->key < y->key) y->l = x;
+        else y->r = x;
+        splay(x); sz++; return 1;
+    }
+
+    bool erase(const T &key){
+        node *x = root;
+        while (x){
+            if (x->key == key) break;
+            if (x->key < key) x = x->r;
+            else x = x->l;
+        }
+        if (!x) return 0; splay(x);
+        node *y = x->l;
+        if (!y){
+            root = x->r; if (root) root->p = 0;
+            return 0;
+        }
+        while (y->r) y = y->r;
+        if (x->r){
+            y->r = x->r; x->r->p = y->r;
+        }
+        root = x->l; root->p = 0; return 1;
+    }
+
+    void inorder(){
+        inorder(root);
+    }
+};
+
+int main(){
+    freopen("SplayTree.inp", "r", stdin);
+    freopen("SplayTree.out", "w", stdout);
+    splay_tree <int> s;
+    for (int i = 1; i <= int(1e3); i++) s.insert(abs(int(rng())));
+    s.inorder();
+}
