@@ -88,11 +88,11 @@ public:
     bool find(const T &key){
         node *x = root;
         while (x){
-            if (x->key == key) return 1;
+            if (x->key == key) break;
             if (x->key < key) x = x->r;
             else x = x->l;
         }
-        return 0;
+        if (x) splay(x); return x ? 1 : 0;
     }
 
     bool insert(const T &key){
@@ -139,6 +139,4 @@ int main(){
     freopen("SplayTree.inp", "r", stdin);
     freopen("SplayTree.out", "w", stdout);
     splay_tree <int> s;
-    for (int i = 1; i <= int(1e3); i++) s.insert(abs(int(rng())));
-    s.inorder();
 }
