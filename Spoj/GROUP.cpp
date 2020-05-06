@@ -1,11 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
+
 #define fi first
 #define se second
 using ll = long long;
 using ii = pair <int, int>;
+
 const int C = 1e6 + 5;
 const int N = 3e5 + 5;
+
 class lichao_tree{
 private:
     class line{
@@ -20,6 +23,7 @@ private:
             return a * x + b;
         }
     } s[C * 4];
+
     void insert(int i, int l, int r, line d){
         if (l + 1 == r){
             if (d(l) < s[i](l)) s[i] = d; return;
@@ -32,6 +36,7 @@ private:
         }
         else insert(i * 2, l, m, d);
     }
+
     ll query(int i, int l, int r, int x){
         if (l + 1 == r) return s[i](x);
         int m = (l + r) / 2;
@@ -44,10 +49,12 @@ public:
     void insert(ll a, ll b){
         insert(1, 0, C, {a, b});
     }
+
     ll query(int x){
         return query(1, 0, C, x);
     }
 } lct;
+
 int main(){
     int n; cin >> n;
     vector <ii> a(n), b;
