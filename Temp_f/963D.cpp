@@ -63,7 +63,7 @@ public:
     }
 
     friend void operator /= (modular &a, const modular &b){
-        return a = a * inverse(b);
+        a = a * inverse(b);
     }
 
     friend istream& operator >> (istream &is, modular &a){
@@ -75,61 +75,51 @@ public:
     }
 };
 
-#define all(v) begin(v), end(v)
 const int N = 1e5 + 5;
-vector <int> adj[N]; modular dp[N][3];
-modular pre0[N], pre1[N], suf0[N], suf1[N];
+const int base = 31;
+char s[N], t[N]; int n, q, cnt[N], k;
+modular hash_t[N], pow_t[N];
 
-void dfs_init(int v, int p){
-    if (p != 0) adj[v].erase(find(all(adj[v]), p));
-    for (int c : adj[v]) dfs_init(c, v);
+void build(){
+    pow_t[0] = 1;
+    for (int i = 1; i <= n; i++){
+        hash_t[i] = hash_t[i - 1] * base + s[i] - 'a' + 1;
+        pow_t[i] = pow_t[i - 1] * base;
+    }
 }
 
-void dfs_sol(int v){
-    for (int c : adj[v]) dfs_sol(c);
-    modular c1, c2, c3, c4, pre;
-    fill_n(pre0, size(adj[v]), 1);
-    fill_n(pre1, size(adj[v]), 1);
-    fill_n(suf0, size(adj[v]) + 1, 1);
-    fill_n(suf1, size(adj[v]) + 1, 1);
-    if (!adj[v].empty()){
-        pre0[0] = dp[adj[v][0]][0];
-        pre1[0] = dp[adj[v][0]][1];
+modular get_hash(int i, int j){
+    return hash_t[j] - hash_t[i - 1] * pow_t[j - i + 1];
+}
+
+int query(){
+    int m = strlen(t + 1);
+    int lo = m, hi = n, mi, ans = -1;
+    modular hasht;
+    for (int i = 1; i <= m; i++)
+        hasht = hasht * base + t[i] - 'a' + 1;
+    while (lo <= hi){
+        mi = (lo + hi) / 2; bool flag = false;
+        for (int i = 1; i <= n; i++) cnt[i] = 0;
+        for (int i = m; i <= n; i++)
+            if (get_hash(i - m + 1, i) == hasht){
+                cnt[max(i - mi + 1, 1)]++; cnt[i - m + 2]--;
+            }
+        for (int i = 1; i <= n; i++) cnt[i] += cnt[i - 1];
+        for (int i = 1; i <= n; i++)
+            if (cnt[i] >= k) flag = true;
+        if (flag){
+            ans = mi; hi = mi - 1;
+        }
+        else lo = mi + 1;
     }
-    for (int i = 1; i < size(adj[v]); i++){
-        pre0[i] = pre0[i - 1] * dp[adj[v][i]][0];
-        pre1[i] = pre1[i - 1] * dp[adj[v][i]][1];
-    }
-    for (int i = size(adj[v]) - 1; ~i; i--){
-        suf0[i] = suf0[i + 1] * dp[adj[v][i]][0];
-        suf1[i] = suf1[i + 1] * dp[adj[v][i]][1];
-    }
-    if (!adj[v].empty()){
-        c1 = dp[adj[v][0]][2] * suf1[1];
-        c3 = dp[adj[v][0]][2] * suf0[1];
-    }
-    for (int i = 1; i < size(adj[v]); i++){
-        c1 += dp[adj[v][i]][2] * pre1[i - 1] * suf1[i + 1];
-        c3 += dp[adj[v][i]][2] * pre0[i - 1] * suf0[i + 1];
-    }
-    for (int i = 0; i < size(adj[v]); i++){
-        c4 += dp[adj[v][i]][2] * suf0[i + 1] * pre;
-        pre *= dp[adj[v][i]][0];
-        pre += dp[adj[v][i]][2] * (i ? pre0[i - 1] : 1);
-    }
-    c2 = adj[v].empty() ? 1 : pre1[size(adj[v]) - 1];
-    dp[v][0] = c1 + c4 + c2;
-    dp[v][1] = c4; dp[v][2] = c2 + c3;
+    return ans;
 }
 
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(0); cout.tie(0);
-    int n; cin >> n;
-    for (int i = 1; i < n; i++){
-        int u, v; cin >> u >> v;
-        adj[u].push_back(v); adj[v].push_back(u);
+    scanf("%s%d", s + 1, &q); n = strlen(s + 1);
+    build();
+    while (q--){
+        scanf("%d%s", &k, t + 1); printf("%d\n", query());
     }
-    dfs_init(1, 0); dfs_sol(1);
-    cout << dp[1][0] << '\n';
 }

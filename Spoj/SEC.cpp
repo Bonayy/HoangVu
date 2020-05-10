@@ -32,7 +32,8 @@ class Trie{
 				if (pt == nullptr) break;
 				ans += pt->cnt;
 			}
-			if (pt != nullptr) ans += pt->num - pt->cnt;
+			if (pt != nullptr)
+				ans += pt->num - pt->cnt;
 			return ans;
 		}
 } T;

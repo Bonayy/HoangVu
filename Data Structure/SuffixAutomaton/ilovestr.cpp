@@ -13,7 +13,7 @@ struct suffix_automaton{
         }
     };
 
-    static const int N = 250005;
+    static const int N = 2e6 + 5;
     state st[N << 1]; 
     int sz = 0, last, dp[N << 1], cnt[N << 1];
     vector <ii> order;
@@ -62,7 +62,7 @@ struct suffix_automaton{
         return dp[cur] = dp[cur] + 2;
     }
 
-    void build(const string &s, bool need = 0){
+    void init(const string &s, bool need = 0){
         clear(); for (char c : s) extend(c);
         if (need){
             sort(order.rbegin(), order.rend());
@@ -72,7 +72,7 @@ struct suffix_automaton{
     }
 
     int lcs(const string &s, const string &t){
-        build(s); int l = 0, p = 0, ans = 0;
+        init(s); int l = 0, p = 0, ans = 0;
         for (int i = 0; t[i]; i++){
             while (p && !st[p].nxt.count(t[i])){
                 p = st[p].link; l = st[p].len;
@@ -96,9 +96,12 @@ struct suffix_automaton{
 } sa;
 
 void solve(){
-    sa.clear(); string s; cin >> s;
-    for (char c : s) sa.extend(c);
-    cout << sa.dfs(0) - 1 << '\n';
+    string s; cin >> s; sa.init(s);
+    int q; cin >> q;
+    while (q--){
+        cin >> s;
+        cout << (sa.count(s) ? "y\n" : "n\n");
+    }
 }
 
 int main(){
