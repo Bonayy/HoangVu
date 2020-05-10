@@ -6,11 +6,13 @@ string seq = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
 
 class trie{
 public:
-    int nxt[N][128], aut[N][128], link[N], near[N], sz; bool leaf[N], ok[N];
+    int nxt[N][128], aut[N][128], link[N], near[N], sz;
+    bool leaf[N], ok[N];
     void init(){
         for (int i = 0; i <= sz; i++){
             link[i] = near[i] = ok[i] = leaf[i] = 0;
-            for (int c = 0; c < 60; c++) nxt[i][c] = aut[i][c] = 0;
+            for (int c = 0; c < 60; c++)
+                nxt[i][c] = aut[i][c] = 0;
         }
         sz = 0;
     }
@@ -19,7 +21,8 @@ public:
         int pt = 0;
         for (char c : s){
             int tmp = c <= 'z' ? c - 'a' : c - 'a' + 26;
-            if (!nxt[pt][tmp]) nxt[pt][tmp] = ++sz; pt = nxt[pt][tmp];
+            if (!nxt[pt][tmp]) nxt[pt][tmp] = ++sz;
+            pt = nxt[pt][tmp];
         }
         leaf[pt] = 1; id[i] = pt;
     }
@@ -57,7 +60,7 @@ void solve(){
     }
     tt.build_link(); tt.solve(s);
     for (int i = 1; i <= q; i++)
-        if (tt.ok[id[i]]) cout << "y\n"; else cout << "n\n";
+        cout << (tt.ok[id[i]] ? "y\n" : "n\n");
 }
 
 int main(){
