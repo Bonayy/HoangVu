@@ -11,9 +11,8 @@ struct manacher{
         t += '#'; int n = t.size(), c(0), r(0);
         for (int i = 0; i < n; i++){
             f[i] = i < r ? min(r - i, f[2 * c - i]) : 0;
-            while (i > f[i] && i + f[i] + 1 < n)
-                if (t[i - f[i] - 1] == t[i + f[i] + 1]) f[i]++; 
-                else break;
+            while (i > f[i] && i + f[i] + 1 < n && 
+            t[i - f[i] - 1] == t[i + f[i] + 1]) f[i]++; 
             if (i + f[i] > r){
                 c = i; r = i + f[i];
             }
