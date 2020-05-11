@@ -7,8 +7,9 @@ string seq = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
 class trie{
 public:
     int nxt[N][128], aut[N][128], link[N], near[N], sz;
-    bool leaf[N], ok[N];
-    void init(){
+    bool leaf[N], ok[N]; int dep[N];
+
+    void clear(){
         for (int i = 0; i <= sz; i++){
             link[i] = near[i] = ok[i] = leaf[i] = 0;
             for (int c = 0; c < 60; c++)
@@ -22,6 +23,7 @@ public:
         for (char c : s){
             int tmp = c <= 'z' ? c - 'a' : c - 'a' + 26;
             if (!nxt[pt][tmp]) nxt[pt][tmp] = ++sz;
+            dep[nxt[pt][tmp]] = dep[pt] + 1;
             pt = nxt[pt][tmp];
         }
         leaf[pt] = 1; id[i] = pt;
@@ -48,12 +50,18 @@ public:
             int tmp = c <= 'z' ? c - 'a' : c - 'a' + 26;
             pt = aut[pt][tmp]; ok[pt] = true;
         }
-        for (int i = sz; ~i; i--) ok[link[i]] |= ok[i];
+        vector <int> order;
+        for (int i = 0; i <= sz; i++) order.push_back(i);
+        sort(order.begin(), order.end(),
+        [&](int p, int q){
+            return dep[p] > dep[q];
+        });
+        for (int x : order) ok[link[x]] |= ok[x];
     }
 } tt;
 
 void solve(){
-    tt.init();
+    tt.clear();
     string s, t; cin >> s; int q; cin >> q;
     for (int i = 1; i <= q; i++){
         cin >> t; tt.insert(t, i);

@@ -96,7 +96,7 @@ struct suffix_automaton{
 } sa;
 
 void solve(){
-    string s; cin >> s; sa.init(s);
+    string s; cin >> s; sa.init(s, 1);
     int q; cin >> q;
     while (q--){
         cin >> s;
