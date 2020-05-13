@@ -75,7 +75,9 @@ private:
     }
 
 public:
-    splay_tree(): root(0){}
+    splay_tree(){
+        root = nullptr; sz = 0;
+    }
 
     ~splay_tree(){
         delete root;
@@ -136,7 +138,5 @@ public:
 };
 
 int main(){
-    freopen("SplayTree.inp", "r", stdin);
-    freopen("SplayTree.out", "w", stdout);
     splay_tree <int> s;
 }

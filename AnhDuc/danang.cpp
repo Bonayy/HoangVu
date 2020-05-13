@@ -24,8 +24,6 @@ vector <int> adj[N];
 priority_queue <path> pq;
 
 int main(){
-    freopen("danang.inp", "r", stdin);
-    freopen("danang.out", "w", stdout);
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
     int n, m, d; cin >> n >> m >> d;
