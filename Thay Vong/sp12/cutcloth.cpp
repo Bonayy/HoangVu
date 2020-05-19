@@ -6,15 +6,17 @@ const int N = 2e3 + 5;
 int a[N], l[N], r[N]; ll dp[N][N];
 vector <int> st;
 
+/// dp[i][j] is the number of rectangles x * y
+/// such that x <= i, y <= j and one edge lie on the ground
+
 ll cal(int n, int k){
     if (n < k) return 0;
-    return 1ll * (1 + n - k + 1)
-            * (n - k + 1) / 2;
+    return 1ll * (n - k + 2) * (n - k + 1) / 2;
 }
 
 int main(){
-    freopen("cutcloth.in", "r", stdin);
-    freopen("cutcloth.out", "w", stdout);
+    //freopen("cutcloth.in", "r", stdin);
+    //freopen("cutcloth.out", "w", stdout);
     int n, m, k; ll res = 0;
     scanf("%d%d%d", &n, &m, &k);
     for (int i = 1; i <= n; i++){
