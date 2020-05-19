@@ -30,6 +30,8 @@ int cal(int i, int j){
 }
 
 int main(){
+    freopen("dolls.inp", "r", stdin);
+    freopen("dolls.out", "w", stdout);
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
     int n; cin >> n;
