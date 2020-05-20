@@ -15,8 +15,8 @@ ll cal(int n, int k){
 }
 
 int main(){
-    //freopen("cutcloth.in", "r", stdin);
-    //freopen("cutcloth.out", "w", stdout);
+    freopen("cutcloth.in", "r", stdin);
+    freopen("cutcloth.out", "w", stdout);
     int n, m, k; ll res = 0;
     scanf("%d%d%d", &n, &m, &k);
     for (int i = 1; i <= n; i++){
