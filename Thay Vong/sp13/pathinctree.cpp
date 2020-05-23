@@ -23,8 +23,11 @@ struct edge{
 };
 
 const int N = 1e5 + 5;
-int dp[N], tmp[N]; edge lst[N];
+int dp[N], buf[N]; edge lst[N];
 vector <int> adj[N];
+/// when go to diffrent equivalent class from the current,
+/// merge the buffer to the dp table
+/// so that the path is always strictly increasing
 
 template <class X, class Y>
 bool chkmax(X &p, const Y &q){
@@ -44,12 +47,12 @@ int main(){
     for (int i = 1, j = 0; i < n; i++){
         if (lst[i].w > lst[j].w)
             while (j < i){
-                chkmax(dp[lst[j].u], tmp[lst[j].u]);
-                chkmax(dp[lst[j].v], tmp[lst[j].v]);
+                chkmax(dp[lst[j].u], buf[lst[j].u]);
+                chkmax(dp[lst[j].v], buf[lst[j].v]);
                 j++;
             }
-        chkmax(res, tmp[lst[i].u] = dp[lst[i].v] + 1);
-        chkmax(res, tmp[lst[i].v] = dp[lst[i].u] + 1);
+        chkmax(res, buf[lst[i].u] = dp[lst[i].v] + 1);
+        chkmax(res, buf[lst[i].v] = dp[lst[i].u] + 1);
     }
     cout << res << '\n';
 }
