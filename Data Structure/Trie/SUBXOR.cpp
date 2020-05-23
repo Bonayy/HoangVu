@@ -7,7 +7,7 @@ using ll = long long;
 
 struct NumTrie{
     struct TNode{
-        int cnt[2], child[2];
+        int cnt[2], ch[2];
         TNode(){
             cnt[0] = cnt[1] = 0;
         }
@@ -25,12 +25,12 @@ struct NumTrie{
             bit = (x >> i) & 1;
             if (Trie[pt].cnt[bit] == 0){
                 Trie[pt].cnt[bit] = 1;
+                Trie[pt].ch[bit] = Trie.size();
                 Trie.push_back(TNode());
-                Trie[pt].child[bit] = Trie.size() - 1;
                 flag = true;
             }
             else ++Trie[pt].cnt[bit];
-            pt = Trie[pt].child[bit];
+            pt = Trie[pt].ch[bit];
         }
         return flag;
     }
@@ -41,12 +41,12 @@ struct NumTrie{
             if ((k >> i) & 1){
                 res += Trie[pt].cnt[bit];
                 if (Trie[pt].cnt[bit ^ 1] > 0)
-                    pt = Trie[pt].child[bit ^ 1];
+                    pt = Trie[pt].ch[bit ^ 1];
                 else break;
             }
             else {
                 if (Trie[pt].cnt[bit] > 0)
-                    pt = Trie[pt].child[bit];
+                    pt = Trie[pt].ch[bit];
                 else break;
             }
         }
