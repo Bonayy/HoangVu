@@ -7,7 +7,7 @@
 /// idea:
 /// i) a & b = c => c <= a => decreasing => binary search or 2-pointers work
 /// ii) similar to i), note that it is increasing
-/// iii) the linearity of xor operator on modulo 2, a ^ b = c <=> b = a ^ c
+/// iii) the linearity of xor operator, a ^ b = c <=> b = a ^ c
 
 #include <bits/stdc++.h>
 using namespace std;
