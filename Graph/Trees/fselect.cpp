@@ -38,9 +38,6 @@ int lca(int u, int v){
     for (int k = 18; k >= 0; k--)
         if (dep[anc[u][k]] >= dep[v])
             u = anc[u][k];
-    /*for (int k = 18; k >= 0; k--)
-        if (dep[anc[v][k]] >= dep[u])
-            v = anc[v][k];*/
     if (u == v) return u;
     for (int k = 18; k >= 0; k--)
         if (anc[u][k] != anc[v][k]){
