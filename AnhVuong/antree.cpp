@@ -40,7 +40,7 @@ void prepare(){
 }
 
 int lca(int u, int v){
-    if (dep[u] < dep[v]) return lca(v, u);
+    if (dep[u] < dep[v]) swap(u, v);
     for (int k = 18; ~k; k--)
         if (dep[anc[k][u]] >= dep[v])
             u = anc[k][u];
