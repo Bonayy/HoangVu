@@ -40,10 +40,9 @@ int main(){
     for (int i = 1, j = 1, k = 1; i <= n; i++){
         j = max(j, i); k = max(k, i);
         int p = query_or(i, j), q = query_or(i, k);
-        while (p < x && j <= n) j++, p |= a[j];
-        while (q <= x && k <= n) k++, q |= a[k];
+        while ((p & x) == p && (p ^ x) > 0 && j <= n) j++, p |= a[j];
+        while ((q & x) == q && k <= n) k++, q |= a[k];
         cntor += k - j;
-        //cout << i << ' ' << j << ' ' << k << '\n';
     }
     for (int k = 1, p = 1; k <= 17; k++, p <<= 1)
         for (int i = 1; i + (p << 1) <= n + 1; i++)
@@ -51,8 +50,8 @@ int main(){
     for (int i = 1, j = 1, k = 1; i <= n; i++){
         j = max(j, i); k = max(k, i);
         int p = query_and(i, j), q = query_and(i, k);
-        while (p > x && j <= n) j++, p &= a[j];
-        while (q >= x && k <= n) k++, q &= a[k];
+        while ((p & x) == x && (p ^ x) > 0 && j <= n) j++, p &= a[j];
+        while ((q & x) == x && k <= n) k++, q &= a[k];
         cntand += k - j;
     }
     cout << cntand << '\n' << cntor << '\n' << cntxor << '\n';
