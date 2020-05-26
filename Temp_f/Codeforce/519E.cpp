@@ -39,31 +39,17 @@ int kth_anc(int u, int k){
     return u;
 }
 
-void query(int u, int v){
-    if (u == v){
-        cout << 0 << ' ' << n << ' ' << 0 << '\n';
+int query(int u, int v){
+    if (u == v) return n; int r = lca(u, v);
+    int dis = dep[u] + dep[v] - 2 * dep[r];
+    if (dep[u] < dep[v]) swap(u, v);
+    if (dep[u] == dep[v]){
+        int x = kth_anc(u, dep[v] - dep[r] - 1);
+        int y = kth_anc(v, dep[v] - dep[r] - 1);
+        return n - sz[x] - sz[y];
     }
-    else {
-        int r = lca(u, v); bool flag = 0;
-        int dis = dep[u] + dep[v] - 2 * dep[r];
-        if (dep[u] < dep[v]){
-            swap(u, v); flag = true;
-        }
-        int le = 0, gr = 0, eq = 0;
-        if (dep[u] == dep[v]){
-            int x = kth_anc(u, dep[v] - dep[r] - 1);
-            int y = kth_anc(v, dep[v] - dep[r] - 1);
-            le = sz[x]; gr = sz[y]; eq = n - le - gr;
-        }
-        else {
-            int x = kth_anc(u, (dis - 1) / 2);
-            le = sz[x];
-            if (dis % 2 == 0) eq = sz[anc[0][x]] - sz[x];
-            gr = n - le - eq;
-        }
-        if (flag) swap(le, gr);
-        cout << le << ' ' << eq << ' ' << gr << '\n';
-    }
+    int x = kth_anc(u, (dis - 1) / 2);
+    return dis & 1 ? 0 : sz[anc[0][x]] - sz[x];
 }
 
 int main(){
@@ -79,5 +65,6 @@ int main(){
             if (dep[u] >= (1 << k))
                 anc[k][u] = anc[k - 1][anc[k - 1][u]];
     for (int i = 1, u, v; i <= q; i++){
-        cin >> u >> v; query(u, v);
+        cin >> u >> v; cout << query(u, v) << '\n';
     }
+}
