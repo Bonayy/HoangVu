@@ -46,5 +46,4 @@ int main(){
         cout << res << '\n';
         bit.update(1, res, 1);
     }
-
 }
