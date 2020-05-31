@@ -8,13 +8,18 @@ struct suffix_automaton{
     struct state{
         int len, link;
         map <char, int> nxt;
+
         int& operator [] (const char &c){
             return nxt[c];
         }
+
+        void reset(){
+            nxt.clear(); len = link = 0;
+        }
     };
 
-    static const int N = 250005;
-    state st[N << 1]; 
+    static const int N = 1e6 + 5;
+    state st[N << 1];
     int sz = 0, last, dp[N << 1], cnt[N << 1];
     vector <ii> order;
 
@@ -23,9 +28,11 @@ struct suffix_automaton{
     }
 
     void clear(){
+        for (int i = 0; i < sz; i++){
+            st[i].reset(); dp[i] = -1;
+        }
         st[0].len = 0; st[0].link = -1;
-        sz++; last = 0; dp[0] = -1;
-        st[0].nxt.clear(); order.clear();
+        last = 0; order.clear(); sz = 1;
     }
 
     void extend(char c){
@@ -62,7 +69,7 @@ struct suffix_automaton{
         return dp[cur] = dp[cur] + 2;
     }
 
-    void build(const string &s, bool need = 0){
+    void init(const string &s, bool need = 0){
         clear(); for (char c : s) extend(c);
         if (need){
             sort(order.rbegin(), order.rend());
@@ -72,7 +79,7 @@ struct suffix_automaton{
     }
 
     int lcs(const string &s, const string &t){
-        build(s); int l = 0, p = 0, ans = 0;
+        init(s); int l = 0, p = 0, ans = 0;
         for (int i = 0; t[i]; i++){
             while (p && !st[p].nxt.count(t[i])){
                 p = st[p].link; l = st[p].len;
@@ -95,14 +102,10 @@ struct suffix_automaton{
     }
 } sa;
 
-void solve(){
-    sa.clear(); string s; cin >> s;
-    for (char c : s) sa.extend(c);
-    cout << sa.dfs(0) - 1 << '\n';
-}
-
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
-    int t; cin >> t; while (t--) solve();
+    string s, t; cin >> s >> t;
+    sa.init(s, 1);
+    cout << sa.count(t) << '\n';
 }
