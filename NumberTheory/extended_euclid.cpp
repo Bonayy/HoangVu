@@ -1,10 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int extgcd(int a, int b, int &x, int &y){
+template <typename ll>
+ll ext_euclid(ll a, ll b, ll &x, ll &y){
     int g = a; x = 1; y = 0;
     if (b != 0){
-        g = extgcd(b, a % b, y, x);
+        g = ext_euclid(b, a % b, y, x);
         y -= (a / b) * x;
     }
     return g;
@@ -12,5 +13,5 @@ int extgcd(int a, int b, int &x, int &y){
 
 int main(){
     int a, b, x, y; cin >> a >> b;
-    cout << extgcd(a, b, x, y) << ' ' << x << ' ' << y << '\n';
+    cout << ext_euclid(a, b, x, y) << '\n';
 }
