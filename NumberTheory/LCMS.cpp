@@ -60,8 +60,8 @@ int main(){
     cin.tie(nullptr);
     int n, res = 0, maxv = 0; cin >> n;
     for (int i = 1, x; i <= n; i++){
-        cin >> x; sum[x] = plus_mod(sum[x], x);
-        maxv = max(maxv, x);
+        cin >> x; maxv = max(maxv, x);
+        sum[x] = plus_mod(sum[x], x);
     }
     for (int i = 1; i <= maxv; i++){
         w[i] += inverse(i);
