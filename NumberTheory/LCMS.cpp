@@ -53,7 +53,7 @@ using namespace modular;
  
 const int N = 2e5 + 5;
 const int C = 1e6 + 5;
-int a[N], sum[C], w[C];
+int sum[C], w[C];
  
 int main(){
     ios_base::sync_with_stdio(false);
