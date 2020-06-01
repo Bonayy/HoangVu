@@ -13,8 +13,6 @@ const int C = 1e6 + 5;
 int w[C], cnt[C];
 
 int main(){
-    freopen("GCDS.inp", "r", stdin);
-    freopen("GCDS.out", "w", stdout);
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
     int mx = 0, n; ll res = 0; cin >> n;
