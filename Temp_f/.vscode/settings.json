@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "complex": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "chrono": "cpp"
     }
 }
