@@ -20,11 +20,10 @@ int main(){
         cin >> x; cnt[x]++; chkmax(mx, x);
     }
     for (int i = 1; i <= mx; i++){
-        w[i] += i; int sum = 0;
-        for (int j = 2 * i; j <= mx; j += i)
-            w[j] -= w[i];
-        for (int j = i; j <= mx; j += i)
-            sum += cnt[j];
+        w[i] += i; int sum = cnt[i];
+        for (int j = 2 * i; j <= mx; j += i){
+            w[j] -= w[i]; sum += cnt[j];
+        }
         res += 1ll * sum * (sum - 1) * w[i];
     }
     cout << res / 2 << '\n';
