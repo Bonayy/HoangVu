@@ -1,47 +1,59 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+ 
 const int N = 1e5 + 5;
-vector <int> strong[N], weak[N], cmp;
-bitset <N> in_st, used[2];
-bool cycle;
-
+vector <int> adj[N];
+vector <int> ext, cmp, rev[N];
+int par[N];
+bitset <N> need, used;
+ 
 void dfs1(int u){
-    used[0][u] = 1; cmp.push_back(u);
-    for (int v : weak[u])
-        if (!used[0][v]) dfs1(v);
+    used[u] = true;
+    for (int v : adj[u])
+        if (!used[v]) dfs1(v);
+    ext.push_back(u);
 }
-
+ 
 void dfs2(int u){
-    if (cycle) return;
-    used[1][u] = 1; in_st[u] = 1;
-    for (int v : strong[u]){
-        if (in_st[v]){
-            cycle = true; break;
-        }
-        if (!used[1][v]) dfs2(v);
-    }
-    in_st[u] = 0;
+    used[u] = true;
+    cmp.push_back(u);
+    for (int v : rev[u])
+        if (!used[v]) dfs2(v);
 }
-
+ 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
-    int n, m, res = 0; cin >> n >> m;
+    used.reset();
+    int n, m; cin >> n >> m;
+    for (int i = 1; i <= n; i++)
+        need[i] = 1;
     for (int i = 1; i <= m; i++){
-        int u, v; cin >> u >> v;
-        strong[u].push_back(v);
-        weak[u].push_back(v);
-        weak[v].push_back(u);
+        int u, v; cin >> v >> u;
+        adj[u].push_back(v);
+        rev[v].push_back(u);
     }
-    for (int u = 1; u <= n; u++)
-        if (!used[0][u]){
-            cmp.clear(); dfs1(u);
-            cycle = 0;
-            for (int v : cmp)
-                if (!used[1][v]) dfs2(v);
-            if (cycle) res += cmp.size();
-            else res += cmp.size() - 1; 
+    for (int i = 1; i <= n; i++)
+        if (!used[i]) dfs1(i);
+    used.reset(); int res = 0;
+    reverse(ext.begin(), ext.end());
+    for (int u : ext) if (!used[u]){
+        cmp.clear(); dfs2(u);
+        for (int v : cmp){
+            par[v] = u;
+            if (v != u) need[v] = 0;
         }
+    }
+    for (int i = 1; i <= n; i++)
+        for (int j : adj[i])
+            if (par[i] != par[j])
+                need[par[j]] = 0;
+    if (need.count() > 1)
+        return cout << "0\n", 0;
+    int r = need._Find_first();
+    for (int i = 1; i <= n; i++)
+        if (par[i] == r) res++;
     cout << res << '\n';
+    for (int i = 1; i <= n; i++)
+        if (par[i] == r) cout << i << ' ';
 }
