@@ -4,9 +4,8 @@ using namespace std;
 using ll = long long;
 
 const int N = 3e5 + 5;
-ll bit[2][N]; int a[N];
-int in[N], out[N], dep[N], tim, n, q;
-vector <int> adj[N];
+int in[N], out[N], dep[N], tim, n, q, a[N];
+vector <int> adj[N]; ll bit[2][N];
 
 void dfs(int u){
     in[u] = ++tim;

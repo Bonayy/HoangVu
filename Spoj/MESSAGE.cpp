@@ -9,8 +9,7 @@ template <typename T> inline void read(T &x){
         nega = 1;
         c = getchar();
     }
-    x = c - 48;
-    while (isdigit(c = getchar()))
+    x = c - 48;    while (isdigit(c = getchar()))
         x = x * 10 + c - 48;
     if (nega)
         x = -x;
