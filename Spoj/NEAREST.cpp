@@ -1,64 +1,64 @@
-#define x real()
-#define y imag()
-#include <iostream>
-#include <cstdio>
-#include <cmath>
-#include <algorithm>
-#include <complex>
+#include <bits/stdc++.h>
 using namespace std;
 
-typedef complex <double> point;
+#define lb lower_bound
+#define ub upper_bound
 
-double mdist = 1E20;
-const int maxn = 1e5 + 10;
+template <class T>
+class point{
+public:
+    T x, y;
 
-bool cmp_x(const point& a,const point& b){
-    return a.x < b.x;
-}
+    point(): x(0), y(0){}
 
-bool cmp_y(const point& a,const point& b){
-    return a.y < b.y;
-}
+    point(T x, T y): x(x), y(y){}
 
-void Update(const point& a, const point& b){
-    mdist = min(mdist, abs(a - b));
-}
-
-point a[maxn];
-static point t[maxn];
-void Find(int l, int r){
-    if (r <= l) return;
-    if (r == l + 1){
-        Update(a[l], a[r]);
-        if (!cmp_y(a[l], a[r])) swap(a[l], a[r]);
-        return;
+    friend bool operator < (point a, point b){
+        return a.x < b.x || (a.x == b.x && a.y < b.y);
     }
-    int m = (l + r) / 2;
-    int midx = a[m].x;
-    Find(l, m); Find(m + 1, r);
-    merge(a + l, a + m + 1, a + m + 1, a + r + 1, t, cmp_y);
-    copy(t, t + r - l + 1, a + l);
-    int top = 0;
-    for (int i = l; i <= r; i++)
-        if (abs(midx - a[i].x) < mdist){
-            for (int j = top - 1; j >= 0 && t[j].y - a[i].y + mdist > 0; j--)
-                Update(t[j], a[i]);
-            t[top++] = a[i];
-        }
-}
+
+    friend point operator + (point a, point b){
+        return point(a.x + b.x, a.y + b.y);
+    }
+
+    friend point operator - (point a, point b){
+        return point(a.x - b.x, a.y - b.y);
+    }
+
+    friend T dot(point a, point b){
+        return a.x * b.x + a.y * b.y;
+    }
+
+    friend T cross(point a, point b){
+        return a.x * b.y - a.y * b.x;
+    }
+
+    friend T norm(point a){
+        return a.x * a.x + a.y * a.y;
+    }
+
+    friend T dis(point a, point b){
+        return sqrt(norm(a - b));
+    }
+};
 
 int main(){
     ios_base::sync_with_stdio(false);
-    cin.tie(0);
-    cout.precision(3);
-    fixed(cout);
-    double real, imag;
-    int n; cin >> n;
-    for (int i = 0; i < n; i++){
-        cin >> real >> imag;
-        a[i] = {real, imag};
+    cin.tie(nullptr);
+    int n; cin >> n; double res = 1e20;
+    cout << setprecision(3) << fixed;
+    vector <point <double>> pt(n);
+    for (auto &p : pt) cin >> p.x >> p.y;
+    sort(pt.begin(), pt.end());
+    set <point <double>> s;
+    for (int i = 0, j = 0; i < n; i++){
+        while (pt[i].x - pt[j].x >= res)
+            s.erase({pt[j].y, pt[j].x}), j++;
+        auto l = s.lb({pt[i].y - res, pt[i].x});
+        auto r = s.ub({pt[i].y + res, pt[i].x});
+        for (; l != r; l++)
+            res = min(res, dis(pt[i], {l->y, l->x}));
+        s.insert({pt[i].y, pt[i].x});
     }
-    sort(a, a + n, cmp_x);
-    Find(0, n - 1);
-    cout << mdist;
+    cout << res << '\n';
 }
