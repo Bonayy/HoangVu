@@ -6,24 +6,41 @@ using namespace std;
 using ll = long long;
 
 const int N = 1e5 + 5;
-int a[N], in[N], out[N], tim; ll dp[N];
-vector <int> adj[N], pos[N];
+int a[N], sz[N], n, s[N];
+vector <int> adj[N]; ll res[N];
 
-void dfs_init(int u, int p){
-    adj[u].erase(find(all(adj[u]), p));
-    in[u] = ++tim;
-    for (int v : adj[u]) dfs_init(v, u);
-    out[u] = tim;
+void dfs_sz(int u, int p){
+    sz[u] = 1;
+    for (int v : adj[u]){
+        if (v == p) continue;
+        dfs_sz(v, u);
+        sz[u] += sz[v];
+    }
+}
+
+void dfs_sol(int u, int p){
+    ll tmp = n - sz[u] - s[a[u]] + 1;
+    for (int v : adj[u]){
+        if (v == p) continue;
+        s[a[u]] += n - sz[v];
+        dfs_sol(v, u);
+        s[a[u]] -= n - sz[v];
+        tmp *= (sz[v] + 1);
+    }
+    s[a[u]] += sz[u];
+    res[a[u]] += tmp;
 }
 
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(0); cout.tie(0);
-    int n; cin >> n;
-    for (int i = 1, u, v; i < n; i++){
-        cin >> u >> v;
+    ios_base::sync_with_stdio(0);
+    cin.tie(nullptr); cin >> n;
+    for (int i = 1; i < n; i++){
+        int u, v; cin >> u >> v;
         adj[u].eb(v); adj[v].eb(u);
     } 
-    for (int i = 1; i <= n; cin >> a[i++]);
-    
+    for (int i = 1; i <= n; i++)
+        cin >> a[i];
+    dfs_sz(1, 0); dfs_sol(1, 0);
+    for (int i = 1; i <= n; i++)
+        cout << res[i] << '\n';
 }
