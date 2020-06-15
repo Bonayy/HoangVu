@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+/*#include <bits/stdc++.h>
 using namespace std;
 
 #define eb emplace_back
@@ -35,4 +35,24 @@ int main(){
         dfs_sol(i, 0);
     }
     cout << res << '\n';
+}*/
+#include <bits/stdc++.h>
+using namespace std;
+
+const int W = 10010;
+bitset <W> dp;
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
+    freopen("KNAPSACK.inp", "r", stdin);
+    freopen("KNAPSACK.ans", "w", stdout);
+    int n, q; cin >> n >> q; dp[0] = 1;
+    for (int i = 1, x; i <= n; i++){
+        cin >> x; dp |= dp << x;
+    }
+    for (int i = 1, x; i <= q; i++){
+        cin >> x;
+        cout << (dp[x] ? "YES\n" : "NO\n");
+    }
 }
