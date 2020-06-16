@@ -1,108 +1,153 @@
 #include <bits/stdc++.h>
 using namespace std;
+ 
+template <class T = int>
+class big_integer : private basic_string <T> {
+private:
+    static const int base = 1000; bool sign;
 
-namespace bignum{
-    typedef vector <int> bigint;
-    typedef const bigint& cb;
-    const int base = 1000;
-
-    bigint& fix(bigint& a){
-        a.push_back(0);
-        for (int i = 0; i < (int)a.size() - 1; i++){
-            a[i + 1] += a[i] / base; a[i] %= base;
-            if (a[i] < 0) a[i] += base, a[i + 1]--;
+    void fix(){
+        this->push_back(0);
+        for (int i = 0; i < int(this->size()) - 1; i++){
+            this->at(i + 1) += this->at(i) / base;
+            this->at(i) %= base;
+            if (this->at(i) < 0){
+                this->at(i) += base; this->at(i + 1)--;
+            }
         }
-        while (!a.empty() && a.back() == 0) a.pop_back();
-        return a;
+        while (!this->empty() && this->back() == 0) this->pop_back();
     }
 
-    bigint big(int x){
-        bigint res;
+public:
+    big_integer(): sign(true){}
+
+    big_integer(int x){
+        sign = x < 0 ? x = -x, false : true;
         while (x > 0){
-            res.push_back(x % base);
-            x /= base;
+            this->push_back(x % base); x /= base;
         }
-        return fix(res), res;
+        this->fix();
     }
 
-    bigint big(const string& s){
-        bigint res(s.size() / 3 + 1);
-        for (int i = 0, pos; s[i]; i++){
+    big_integer(long long x){
+        sign = x < 0 ? x = -x, false : true;
+        while (x > 0){
+            this->push_back(x % base); x /= base;
+        }
+        this->fix();
+    }
+
+    big_integer(const string &s){
+        sign = s[0] == '-' ? false : true;
+        this->resize(s.size() / 3 + 1);
+        for (int i = sign ? 0 : 1, pos; s[i]; i++){
             pos = (s.size() - i - 1) / 3;
-            res[pos] = res[pos] * 10 + s[i] - '0';
+            this->at(pos) = this->at(pos) * 10 + s[i] - '0';
         }
-        return fix(res), res;
+        this->fix();
     }
 
-    int comp(cb a, cb b){
+    friend big_integer operator - (const big_integer &a){
+        big_integer res = a; res.sign ^= 1; return res;
+    }
+
+    friend int comp(const big_integer &a, const big_integer &b){
+        if (a.sign != b.sign) return a.sign < b.sign ? -1 : 1;
         if (a.size() != b.size())
-            return (int)a.size() - (int)b.size();
-        for (int i = (int)a.size() - 1; i >= 0; i--)
-            if (a[i] != b[i]) return a[i] - b[i];
+            return (a.size() - b.size()) * (a.sign ? 1 : -1);
+        for (int i = a.size() - 1; ~i; i--)
+            if (a[i] != b[i]) return (a[i] - b[i]) * (a.sign ? 1 : -1);
         return 0;
     }
 
-    ostream& operator << (ostream& os, const bigint& a){
-        if (a.empty()) return os << 0;
-        os << a.back();
-        for (int i = a.size() - 2; i >= 0; i--)
-            cout << setw(3) << setfill('0') << a[i];
+    friend ostream& operator << (ostream &os, const big_integer &a){
+        if (a.empty()) return os << "0";
+        if (!a.sign) os << '-'; os << a.back();
+        for (int i = a.size() - 2; ~i; i--)
+            os << setw(3) << setfill('0') << a[i];
         return os;
     }
 
-    #define def_operator(x) bool operator x (cb a, cb b){return comp(a, b) x 0;}
-    def_operator(==)
-    def_operator(>)
-    def_operator(<)
-    def_operator(<=)
-    def_operator(>=)
-    def_operator(!=)
-
-    void operator += (bigint& a, cb b){
-        a.resize(max(a.size(), b.size()));
-        for (int i = 0; i < (int)b.size(); i++)
-            a[i] += b[i];
-        fix(a);
+    friend istream& operator >> (istream &is, big_integer &a){
+        string s; is >> s; a = big_integer(s); return is;
     }
 
-    bigint operator + (bigint a, cb b){
-        a += b; return a;
+    friend string to_string(const big_integer &a){
+        if (a.empty()) return "0"; stringstream ss;
+        if (!a.sign) ss << '-'; ss << a.back();
+        for (int i = a.size() - 2; ~i; i--)
+            ss << setw(3) << setfill('0') << a[i];
+        return ss.str();
     }
 
-    void operator -= (bigint& a, cb b){
-        a.resize(max(a.size(), b.size()));
-        for (int i = 0; i < (int)b.size(); i++)
-            a[i] -= b[i];
-        fix(a);
+    friend bool operator < (const big_integer &a, const big_integer &b){
+        return comp(a, b) < 0;
     }
 
-    bigint operator - (bigint a, cb b){
-        a -= b; return a;
+    friend bool operator <= (const big_integer &a, const big_integer &b){
+        return comp(a, b) <= 0;
     }
 
-    bigint operator * (cb a, cb b){
-        bigint res(a.size() + b.size());
-        for (int i = 0; i < (int)a.size(); i++)
-            for (int j = 0; j < (int)b.size(); j++)
+    friend bool operator > (const big_integer &a, const big_integer &b){
+        return comp(a, b) > 0;
+    }
+
+    friend bool operator >= (const big_integer &a, const big_integer &b){
+        return comp(a, b) >= 0;
+    }
+
+    friend big_integer operator + (const big_integer &a, const big_integer &b){
+        if (a.sign && !b.sign) return a - -b;
+        if (!a.sign && b.sign) return b - -a;
+        big_integer res = a; res.resize(max(a.size(), b.size()));
+        for (int i = 0; i < int(b.size()); i++) res[i] += b[i];
+        res.fix(); return res;
+    }
+
+    friend big_integer operator - (const big_integer &a, const big_integer &b){
+        if (a.sign && !b.sign) return a + -b;
+        if (!a.sign && b.sign) return -(b + -a);
+        if (!a.sign && !b.sign) return -(-a - -b);
+        if (a > b){
+            big_integer res = a;
+            for (int i = 0; i < int(b.size()); i++) res[i] -= b[i];
+            res.fix(); return res;
+        }
+        else {
+            big_integer res = b;
+            for (int i = 0; i < int(a.size()); i++) res[i] -= a[i];
+            res.fix(); res.sign = 0; return res;
+        }
+    }
+
+    friend big_integer operator * (const big_integer &a, const big_integer &b){
+        big_integer res; res.resize(a.size() + b.size());
+        for (int i = 0; i < int(a.size()); i++)
+            for (int j = 0; j < int(b.size()); j++)
                 res[i + j] += a[i] * b[j];
-        return fix(res), res;
+        res.sign = a.sign == b.sign; res.fix(); return res;
     }
 
-    void operator *= (bigint& a, cb b){
+    friend void operator += (big_integer &a, const big_integer &b){
+        a = a + b;
+    }
+
+    friend void operator -= (big_integer &a, const big_integer &b){
+        a = a - b;
+    }
+
+    friend void operator *= (big_integer &a, const big_integer &b){
         a = a * b;
     }
-}
-
-using namespace bignum;
-
+};
+ 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
-    int n; cin >> n;
-    bigint res, fac; res = fac = big(1);
-    n -= 2;
-    while (n > 0){
-        fac *= big(n--); res += fac;
+    int n; cin >> n; n -= 2;
+    big_integer <int> fac = 1, res = 1;
+    while (n){
+        fac *= n--; res += fac;
     }
     cout << res << '\n';
 }
