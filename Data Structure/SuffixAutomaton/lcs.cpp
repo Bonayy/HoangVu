@@ -13,7 +13,7 @@ struct suffix_automaton{
         }
     };
 
-    static const int N = 250005;
+    static const int N = 1000005;
     state st[N << 1]; 
     int sz = 0, last, dp[N << 1];
 
