@@ -6,44 +6,24 @@ using namespace std;
 using ll = long long;
 
 const int N = 1e5 + 5;
-vector <int> st[N], adj[N];
-int n, s[N], c[N], tim;
-int in[N], out[N], sz[N];
-ll ans[N];
+int n, sz[N], c[N], sub[N], cnt[N], last[N];
+vector <int> adj[N];
+ll res[N];
 
-bool is_anc(int u, int v){
-    return in[u] >= in[v] &&
-            out[u] <= out[v];
-}
-
-void dfs_sz(int u, int p){
-    sz[u] = 1; in[u] = ++tim;
+void dfs(int u, int p){
+    sz[u] = 1; ll tmp = 0;
+    int pre = last[c[u]], ssub = 0;
     for (int v : adj[u]){
         if (v == p) continue;
-        dfs_sz(v, u);
-        sz[u] += sz[v];
+        last[c[u]] = v; dfs(v, u);
+        res[c[u]] += tmp * (sz[v] - sub[v]);
+        sz[u] += sz[v]; ssub += sub[v];
+        tmp += sz[v] - sub[v];
     }
-    out[u] = tim;
-}
-
-void dfs_sol(int u, int p){
-    ll tmp = n - sz[u] - s[c[u]] + 1;
-    ans[c[u]] += tmp;
-    int last = s[c[u]]; s[c[u]] = 0;
-    for (int v : adj[u]){
-        if (v == p) continue;
-        ans[c[u]] += tmp * sz[v];
-        tmp += sz[v];
-        s[c[u]] += n - sz[v];
-        dfs_sol(v, u);
-        s[c[u]] -= n - sz[v];
-    }
-    s[c[u]] += sz[u] + last;
-    while (is_anc(st[c[u]].back(), u)){
-        s[c[u]] -= sz[st[c[u]].back()];
-        st[c[u]].pop_back();
-    }
-    st[c[u]].eb(u);
+    cnt[c[u]] += sz[u] - ssub;
+    res[c[u]] += 1ll * (sz[u] - ssub) *
+                (n - cnt[c[u]] + 1);
+    sub[pre] += sz[u]; last[c[u]] = pre;
 }
 
 int main(){
@@ -55,9 +35,8 @@ int main(){
         int u, v; cin >> u >> v;
         adj[u].eb(v); adj[v].eb(u);
     }
-    for (int i = 1; i <= n; i++) cin >> c[i];
-    for (int i = 1; i <= n; i++) st[i].eb(0);
-    dfs_sz(1, 0); dfs_sol(1, 0);
+    for (int i = 1; i <= n; cin >> c[i++]);
+    dfs(1, 0);
     for (int i = 1; i <= n; i++)
-        cout << ans[i] << '\n';
+        cout << res[i] << '\n';
 }
