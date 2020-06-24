@@ -21,12 +21,14 @@ void dfs(int u, int p){
         tmp += sz[v] - sub[v];
     }
     cnt[c[u]] += sz[u] - ssub;
-    res[c[u]] += (sz[u] - ssub) *
+    res[c[u]] += 1ll * (sz[u] - ssub) *
                 (n - cnt[c[u]] + 1);
     sub[pre] += sz[u]; last[c[u]] = pre;
 }
 
 int main(){
+    freopen("colourpath.inp", "r", stdin);
+    freopen("colourpath.out", "w", stdout);
     ios_base::sync_with_stdio(0);
     cin.tie(nullptr); cin >> n;
     for (int i = 1; i < n; i++){

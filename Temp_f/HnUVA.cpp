@@ -6,6 +6,16 @@
 using namespace std;
 
 using ll = long long;
+
+const int mod = 1e9 + 7;
+
+ll pow_mod(ll a, ll k){
+    ll res = 1;
+    for (; k; k >>= 1, a = a * a % mod)
+        if (k & 1) res = res * a % mod;
+    return res;
+}
+
 ll H(int n){
     int t = floor(sqrt(n));
     ll res = 0;
