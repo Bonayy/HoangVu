@@ -5,7 +5,6 @@ int fac[13], a[20], ans[20];
 bitset <20> mark; int x;
 
 int main(){
-    //freopen("input.txt", "r", stdin);
     fac[0] = 1; int n = 0;
     for (int i = 1; i <= 12; i++)
         fac[i] = fac[i - 1] * i;

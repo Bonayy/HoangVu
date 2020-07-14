@@ -63,6 +63,7 @@ struct presistent_segtree{
         return query(root[l - 1], root[r], 1, lim, k);
     }
 };
+
 const int N = 1e5 + 5;
 int a[N], val[N]; vector <int> cmp;
 
