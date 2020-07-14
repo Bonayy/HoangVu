@@ -2,7 +2,7 @@
 using namespace std;
 
 #define eb emplace_back
-#define all(v) (v).begin(), (v).end()
+#define pb pop_back
 using ll = long long;
 
 const int N = 1e5 + 5;
