@@ -1,29 +1,33 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define eb emplace_back
+#define fi first
+#define se second
+
+using ii = pair <int, int>;
+
 const int N = 1e6 + 5;
-int r[N];
+int a[N]; deque <ii> dq;
 
 int main(){
+    freopen("gas.inp", "r", stdin);
+    freopen("gas.out", "w", stdout);
     ios::sync_with_stdio(0);
     cin.tie(nullptr);
     int n, k; cin >> n >> k;
-    vector <int> a(n), st;
-    for (int &x : a) cin >> x;
-    st.push_back(n);
-    for (int i = n - 1; ~i; i--){
-        while (st.back() < n &&
-        a[st.back()] >= a[i])
-            st.pop_back();
-        r[i] = st.back();
-        st.push_back(i);
+    for (int i = 0; i < n; cin >> a[i++]);
+    dq.eb(a[0], k); long long cost = 0;
+    for (int i = 1; i <= n; i++){
+        cost += dq[0].fi; dq[0].se--;
+        if (!dq[0].second) dq.pop_front();
+        int need = 1;
+        while (!dq.empty() &&
+                dq.back().fi > a[i]){
+            need += dq.back().se;
+            dq.pop_back();
+        }
+        dq.eb(a[i], need);
     }
-    int cur = 0; long long res = 0;
-    for (int i = 0; i < n; i++){
-        cout << cur << '\n';
-        int nxt = min(i + k, r[i]);
-        res += 1ll * a[i] * min(nxt - i, k - cur);
-        cur += min(nxt - i, k - cur); cur--;
-    }
-    //cout << res << '\n';
+    cout << cost << '\n';
 }
