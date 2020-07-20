@@ -4,7 +4,7 @@ using namespace std;
 using ll = long long;
 
 const int N = 4e5 + 5;
-int a[N], l[N]; ll dp[N];
+int a[N], mx[N]; ll dp[N];
 
 
 int main(){
@@ -12,11 +12,20 @@ int main(){
     cin.tie(nullptr);
     int n, h, s, d;
     cin >> n >> h >> s >> d;
-    vector <int> st; st.push_back(0);
-    for (int i = 1; i <= n; i++){
-        while (st.back() && a[st.back()] <= a[i])
-            st.pop_back()l
-        l[i] = st.back() + 1; st.push_back(i);
+    int k = (h + d) / s + 1;
+    for (int i = 1; i <= n; i++)
+        cin >> a[i];
+    for (int i = n; i > 0; i--){
+        while (!dq.empty() &&
+        a[dq.back()] >= a[i])
+            dq.pop_back();
+        dq.push_back(i);
+        mx[i - 1] = a[dq.front()];
+        if (dq.front() == i + k - 1)
+            dq.pop_front();
     }
-
+    long long res = 0, cur = 0;
+    for (int i = 1; i <= n; i++){
+        res += max(a[i] - cur, 0ll) * h;
+    }
 }
