@@ -26,14 +26,15 @@ void cal(int x){
 }
 
 int main(){
-    freopen("SQUARE.inp", "r", stdin);
-    freopen("SQUARE.out", "w", stdout);
+    //freopen("SQUARE.inp", "r", stdin);
+    //freopen("SQUARE.out", "w", stdout);
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
     int n; cin >> n; sieve();
     for (int i = 1; i <= n; i++) cal(i);
     long long res = 0;
     for (int i = 1; i <= n; i++)
-        res += 1ll * mp[i] * (mp[i] - 1) * (mp[i] - 2) / 6;
+        res += 1ll * mp[i] * (mp[i] - 1) *
+        (mp[i] - 2) / 6;
     cout << res << '\n';
 }

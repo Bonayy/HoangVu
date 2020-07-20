@@ -1,4 +1,4 @@
-/// anothor dynamic binary heap
+/// another dynamic binary heap
 /// :))))))))))))))))))))))))))
 
 #include <bits/stdc++.h>
@@ -11,14 +11,18 @@ int sz[N], c[N], ls[N], rs[N], p[N];
 ll su[N], lim, res, l[N];
 vector <int> adj[N];
 
+void maintain(int x){
+    sz[x] = sz[ls[x]] + sz[rs[x]] + 1;
+    su[x] = su[ls[x]] + su[rs[x]] + c[x];
+}
+
 int merge(int x, int y){
     if (!x || !y) return x | y;
     if (c[x] < c[y]) swap(x, y);
     rs[x] = merge(rs[x], y);
     if (sz[ls[x]] < sz[rs[x]])
         swap(ls[x], rs[x]);
-    sz[x] = sz[ls[x]] + sz[rs[x]] + 1;
-    su[x] = su[ls[x]] + su[rs[x]] + c[x];
+    maintain(x);
     return x;
 }
 
@@ -28,7 +32,8 @@ int pop(int x){
 
 void dfs(int u){
     for (int v : adj[u]){
-        dfs(v); p[u] = merge(p[u], p[v]);
+        dfs(v);
+        p[u] = merge(p[u], p[v]);
     }
     while (p[u] && su[p[u]] > lim)
         p[u] = pop(p[u]);
