@@ -124,17 +124,18 @@ struct aho_corasick{
     int size() const {
         return __size;
     }
-} aho;
+} ins, del;
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
-    freopen("aho.inp", "r", stdin);
-    freopen("aho.out", "w", stdout);
-    int cmd, n; string s; cin >> n;
-    while (n--){
+    int q, cmd; cin >> q; string s;
+    while (q--){
         cin >> cmd >> s;
-        if (cmd) cout << aho.count(s) << '\n';
-        else aho.insert(s);
+        if (cmd == 1) ins.insert(s);
+        if (cmd == 2) del.insert(s);
+        if (cmd == 3)
+            cout << ins.count(s) -
+                    del.count(s) << endl;
     }
 }

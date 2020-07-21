@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-template <typename ll>
 ll ext_euclid(ll a, ll b, ll &x, ll &y){
     int g = a; x = 1; y = 0;
     if (b != 0){

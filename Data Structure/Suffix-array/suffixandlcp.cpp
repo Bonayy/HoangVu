@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 2e5 + 5;
+const int N = 4e5 + 5;
 
 namespace suffixarray{
     int cnt[N], sa[N], x[N], y[N], lcp[N], n;
@@ -47,6 +47,10 @@ namespace suffixarray{
 };
 
 int main(){
-    string s; cin >> s;
-    
+    ios_base::sync_with_stdio(0);
+    cin.tie(nullptr);
+    using namespace suffixarray;
+    string s; cin >> s; build(s);
+    cout << 1ll * n * (n + 1) / 2 -
+            accumulate(lcp, lcp + n, 0ll) << '\n';
 }
