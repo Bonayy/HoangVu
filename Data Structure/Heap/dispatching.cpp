@@ -11,15 +11,18 @@ int sz[N], c[N], ls[N], rs[N], p[N];
 ll su[N], lim, res, l[N];
 vector <int> adj[N];
 
+void maintain(int x){
+    sz[x] = sz[ls[x]] + sz[rs[x]] + 1;
+    su[x] = su[ls[x]] + su[rs[x]] + c[x];
+}
+
 int merge(int x, int y){
     if (!x || !y) return x | y;
     if (c[x] < c[y]) swap(x, y);
     rs[x] = merge(rs[x], y);
-    sz[x] += sz[y]; su[x] += su[y];
     if (sz[ls[x]] < sz[rs[x]])
         swap(ls[x], rs[x]);
-    sz[x] = sz[ls[x]] + sz[rs[x]] + 1;
-    su[x] = su[ls[x]] + su[rs[x]] + c[x];
+    maintain(x);
     return x;
 }
 
