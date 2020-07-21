@@ -86,4 +86,5 @@ int main(){
         cout << sac[i] << '\n';
     for (int i = 1; i <= m; i++)
         cout << cap[i] << '\n';
+    
 }
