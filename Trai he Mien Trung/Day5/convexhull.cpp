@@ -70,16 +70,7 @@ struct polygon{
     }
 };
 
-int main(){
-    freopen("convexhull.inp", "r", stdin);
-    freopen("convexhull.out", "w", stdout);
-    ios::sync_with_stdio(0);
-    cin.tie(nullptr);
-    cout.precision(1); fixed(cout);
-    int n; cin >> n;
-    vector <point> a(n);
-    for (auto &pt : a)
-        cin >> pt.x >> pt.y;
+void convex_hull(vector <point> &a){
     sort(a.begin(), a.end(),
     [&](point p, point q){
         return p.x < q.x ||
@@ -90,31 +81,61 @@ int main(){
     vector <point> up, down;
     up.push_back(p[0]);
     down.push_back(p[0]);
-    for (int i = 1; i < a.size(); i++){
+    for (int i = 1; i < a.size(); i++) {
         if (i == a.size() - 1 ||
-        cw(p[0], a[i], p[1])){
+        cw(p[0], a[i], p[1])) {
             while (up.size() > 1 &&
             !cw(up[up.size() - 2],
-            up[up.size() - 1], a[i]))
+            up[up.size() - 1], a[i])) {
                 up.pop_back();
+            }
             up.push_back(a[i]);
         }
         if (i == a.size() - 1 ||
-        ccw(p[0], a[i], p[1])){
+        ccw(p[0], a[i], p[1])) {
             while (down.size() > 1 &&
             !ccw(down[down.size() - 2],
-            down[down.size() - 1], a[i]))
+            down[down.size() - 1], a[i])) {
                 down.pop_back();
+            }
             down.push_back(a[i]);
         }
     }
-    polygon convex;
-    for (int i = 1; i < down.size() - 2; i++)
-        convex.push(down[i]);
-    for (int i = up.size() - 1; ~i; i--)
-        convex.push(up[i]);
-    cout << convex.size() << '\n';
-    cout << convex.area() << '\n';
-    for (auto pt : convex.poly)
+    a.clear();
+    for (auto pt : up) {
+        a.push_back(pt);
+    }
+    for (int i = down.size() - 2; i > 0; i--) {
+        a.push_back(down[i]);
+    }
+    reverse(a.begin(), a.end());
+}
+
+int main(){
+    freopen("convexhull.inp", "r", stdin);
+    freopen("convexhull.out", "w", stdout);
+    ios::sync_with_stdio(0);
+    cin.tie(nullptr);
+    cout.precision(1); fixed(cout);
+    int n; cin >> n;
+    vector <point> a(n);
+    for (auto &pt : a)
+        cin >> pt.x >> pt.y;
+    convex_hull(a);
+    auto it = min_element(a.begin(), a.end(),
+    [](point p, point q){
+        return p.y < q.y ||
+        (p.y == q.y && p.x < q.x);
+    });
+    rotate(a.begin(), it, a.end());
+    n = a.size(); cout << n << '\n';
+    ll res = 0;
+    for (int i = 0; i < n; i++) {
+        res += cross(a[i], a[(i + 1) % n]);
+    }
+    cout << res / 2 << ' ' <<
+    (res & 1 ? 5 : 0) << '\n';
+    for (auto pt : a) {
         cout << pt.x << ' ' << pt.y << '\n';
+    }
 }
