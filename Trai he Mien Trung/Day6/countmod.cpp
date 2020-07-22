@@ -8,6 +8,7 @@ ll ext_euclid(ll a, ll b, ll &x, ll &y) {
     if (b != 0) {
         g = ext_euclid(b, a % b, y, x);
         y -= (a / b) * x;
+        cout << a << ' ' << b << '\n';
     }
     return g;
 }
