@@ -9,9 +9,9 @@ bool chkmax(X &a, const Y &b) {
 using ll = long long;
 
 const int N = 1e5 + 5;
-ll n[3], sz[3][N], ver[N][2], h[3][N];
-ll cur, sd[3][N], dp[N][2], mx[3], res;
-vector <int> adj[3][N];
+ll n[3], sz[3][N], h[3][N], res;
+ll cur, sd[3][N], dp[N][2], mx[3];
+vector <int> adj[3][N]; ll tot;
 
 void dfs(int id, int u, int p) {
     sz[id][u] = 1;
@@ -31,12 +31,10 @@ void go(int id, int u, int p) {
         sz[id][p] = n[id] - last;
         cur += n[id] - 2 * last;
     }
-    sd[id][u] = cur;
+    sd[id][u] = cur; tot += cur;
     chkmax(mx[id], cur);
-    for (int v : adj[id][u]) {
-        if (v == p) continue;
-        go(id, v, u);
-    }
+    for (int v : adj[id][u])
+        if (v != p) go(id, v, u);
     if (p) {
         sz[id][p] = n[id];
         sz[id][u] = last;
@@ -45,24 +43,29 @@ void go(int id, int u, int p) {
 }
 
 void cal(int id, int u, int p) {
-    for (int v : adj[id][u]) {
-        if (v == p) continue;
-        cal(id, v, u);
-    }
+    for (int v : adj[id][u])
+        if (v != p) cal(id, v, u);
     int pid = (id + 2) % 3;
     int sid = (id + 1) % 3;
-    ver[u][0] = ver[u][1] = u;
     dp[u][0] = sd[id][u] * n[pid] +
-    n[pid] * n[sid] * h[u];
+    n[pid] * n[sid] * h[id][u];
     dp[u][1] = sd[id][u] * n[sid] +
-    n[pid] * n[sid] * h[u];
+    n[pid] * n[sid] * h[id][u];
+    ll sub = h[id][u] * n[pid] * n[sid];
+    ll add = n[id] * n[pid] +
+    n[id] * n[sid] + n[pid] * n[sid] * 2
+    + mx[pid] * n[id] + mx[pid] * n[sid]
+    + mx[sid] * n[id] + mx[sid] * n[pid];
     for (int v : adj[id][u]) {
         if (v == p) continue;
-        chkmax(res, n[id] * n[pid] +
-        n[id] * n[sid] + n[pid] * n[sid] * 2
-        mx[pid] * n[id] + mx[pid] * n[sid] +
-        mx[sid] * n[id] + mx[sid] * n[pid]);
+        chkmax(res, add - sub * 2
+        + max(dp[u][0] + dp[v][1],
+        dp[u][1] + dp[v][0]));
+        chkmax(dp[u][0], dp[v][0]);
+        chkmax(dp[u][1], dp[v][1]);
     }
+    chkmax(res, add - sub * 2 +
+    sd[id][u] * (n[pid] + n[sid]));
 }
 
 int main() {
@@ -80,4 +83,7 @@ int main() {
         cur = 0;
         dfs(id, 1, 0); go(id, 1, 0);
     }
+    for (int id = 0; id < 3; id++)
+        cal(id, 1, 0);
+    cout << res + tot / 2 << '\n';
 }
