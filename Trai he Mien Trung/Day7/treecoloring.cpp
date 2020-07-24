@@ -24,8 +24,7 @@ int main() {
     freopen("treecoloring.out", "w", stdout);
     ios::sync_with_stdio(0);
     cin.tie(nullptr);
-    int n; cin >> n;
-    n++; dp[0] = -1;
+    int n; cin >> n; n++; dp[0] = -1;
     for (int i = 2; i <= n; i++) {
         cin >> p[i]; go(i);
         cout << dp[1] << '\n';
