@@ -9,9 +9,9 @@ bool chkmax(X &a, const Y &b) {
 using ll = long long;
 
 const int N = 1e5 + 5;
-ll n[3], sz[3][N], ver[N][2], h[3][N];
-ll cur, sd[3][N], dp[N][2], mx[3], res;
-vector <int> adj[3][N];
+ll n[3], sz[3][N], h[3][N], res;
+ll sd[3][N], dp[N][2], mx[3];
+vector <int> adj[3][N]; ll tmp;
 
 void dfs(int id, int u, int p) {
     sz[id][u] = 1;
@@ -20,27 +20,21 @@ void dfs(int id, int u, int p) {
         h[id][v] = h[id][u] + 1;
         dfs(id, v, u);
         sz[id][u] += sz[id][v];
-        cur += sz[id][v];
+        sd[id][1] += sz[id][v];
     }
 }
 
 void go(int id, int u, int p) {
-    int last = sz[id][u];
     if (p) {
-        sz[id][u] = n[id];
-        sz[id][p] = n[id] - last;
-        cur += n[id] - 2 * last;
+        sd[id][u] = sd[id][p];
+        sd[id][u] +=
+        n[id] - 2 * sz[id][u];
     }
-    sd[id][u] = cur;
-    chkmax(mx[id], cur);
+    tmp += sd[id][u];
+    chkmax(mx[id], sd[id][u]);
     for (int v : adj[id][u]) {
         if (v == p) continue;
         go(id, v, u);
-    }
-    if (p) {
-        sz[id][p] = n[id];
-        sz[id][u] = last;
-        cur -= n[id] - 2 * last;
     }
 }
 
@@ -51,18 +45,25 @@ void cal(int id, int u, int p) {
     }
     int pid = (id + 2) % 3;
     int sid = (id + 1) % 3;
-    ver[u][0] = ver[u][1] = u;
     dp[u][0] = sd[id][u] * n[pid] +
-    n[pid] * n[sid] * h[u];
+    n[pid] * n[sid] * h[id][u];
     dp[u][1] = sd[id][u] * n[sid] +
-    n[pid] * n[sid] * h[u];
+    n[pid] * n[sid] * h[id][u];
+    ll sub = h[id][u] * n[pid] * n[sid];
+    ll add = n[id] * n[pid] +
+    n[id] * n[sid] + n[pid] * n[sid] * 2
+    + mx[pid] * n[id] + mx[pid] * n[sid]
+    + mx[sid] * n[id] + mx[sid] * n[pid];
     for (int v : adj[id][u]) {
         if (v == p) continue;
-        chkmax(res, n[id] * n[pid] +
-        n[id] * n[sid] + n[pid] * n[sid] * 2
-        mx[pid] * n[id] + mx[pid] * n[sid] +
-        mx[sid] * n[id] + mx[sid] * n[pid]);
+        chkmax(res, add - sub * 2
+        + max(dp[u][0] + dp[v][1],
+        dp[u][1] + dp[v][0]));
+        chkmax(dp[u][0], dp[v][0]);
+        chkmax(dp[u][1], dp[v][1]);
     }
+    chkmax(res, add - sub * 2 +
+    sd[id][u] * (n[pid] + n[sid]));
 }
 
 int main() {
@@ -77,7 +78,10 @@ int main() {
         }
     }
     for (int id = 0; id < 3; id++) {
-        cur = 0;
         dfs(id, 1, 0); go(id, 1, 0);
     }
+    for (int id = 0; id < 3; id++) {
+        cal(id, 1, 0);
+    }
+    cout << res + tmp / 2 << '\n';
 }
